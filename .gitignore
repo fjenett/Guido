@@ -3,3 +3,5 @@ bin
 dist
 legacy
 web-export
+
+.DS_Store
