@@ -1,0 +1,82 @@
+<project name="BezierGuiLib" default="install" basedir="./">
+
+	<!-- ++++++++++++++++++++++++++++++++++++++++++
+	
+		BezierGuiLib, yet another gui lib.
+		
+		I think ControlP5 is great but i always
+		have trouble extending it's elements. So
+		this is an effort to have something 
+		focused on being extendible and to test
+		some new ideas ..
+	
+	+++++++++++++++++++++++++++++++++++++++++++ -->
+	
+	<property name="src" 		value="src" />
+	<property name="build" 		value="build" />
+	<property name="bin" 		value="bin" />
+	<property name="dist" 		value="dist" />
+	<property name="lib.name" 	value="BezierGuiLib" />
+	<property name="java.target.version" 
+								value="1.5" />
+	
+	<!--property name="processing.classes" location="/Applications/Processing.app/Contents/Resources/Java/"/-->
+	<property name="processing.classes" location="/Users/fjenett/Repos/processing/processing/build/macosx/work/Processing.app/Contents/Resources/Java/"/>
+	<property name="processing.libs" location="/Users/fjenett/Documents/Processing/libraries"/>	
+
+	<path id="library-classpath">
+		<fileset dir="${processing.classes}" >
+			<include name="core.jar"/>
+		</fileset>
+	</path>
+	
+	<target name="help">
+		<echo>HEELP!</echo>
+	</target>
+
+	<target name="build">
+		
+		<mkdir dir="${build}" />
+		<delete dir="${bin}" />
+		<mkdir dir="${bin}" />
+		
+		<javac srcdir="${src}" destdir="${bin}" source="${java.target.version}">
+			<classpath>
+				<path refid="library-classpath"/>
+			</classpath>
+		</javac>
+		
+	</target>
+	
+	<target name="package" depends="build">
+		
+		<delete dir="${dist}" />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${dist}/library" />
+		
+		<jar jarfile="${dist}/library/${lib.name}.jar" basedir="${bin}"/>
+		
+		<mkdir dir="${dist}/examples" />
+		<copy todir="${dist}/examples">
+			<fileset dir="examples" />
+		</copy>
+		
+		<concat destfile="${dist}/library/${lib.name}.js">
+			<fileset file="src_js/*.js" />
+		</concat>
+		
+	</target>
+	
+	<target name="install" depends="package" >
+		
+		<delete dir="${processing.libs}/${lib.name}" />
+		<mkdir dir="${processing.libs}/${lib.name}" />
+		
+		<copy todir="${processing.libs}/${lib.name}">
+			<fileset dir="${dist}" />
+		</copy>
+		
+	</target>
+
+</project>
+
