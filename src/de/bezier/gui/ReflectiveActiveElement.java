@@ -15,8 +15,10 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	mouseReleased2, mouseReleased0,
 	mouseDragged2, mouseDragged4,
 	mouseDoubleClicked0, mouseDoubleClicked2,
+	mouseScrolled1,
 	isInside2, 
-	isActive0, setActive1;
+	isActive0, setActive1,
+	draw0;
 	Field fieldX, fieldY, fieldWidth, fieldHeight;
 	
 	ReflectiveActiveElement ( Object l )
@@ -226,6 +228,21 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 		try {
 			if (mouseReleased2 != null) mouseReleased2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
+	}
+	
+	public void mouseScrolled ( float step ) {
+		updateXY();
+		try {
+			if (mouseScrolled1 != null) mouseScrolled1.invoke( listener, step );
+		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
+	}
+	
+	public void draw ()
+	{
+		if ( draw0 != null )
+			try { 
+				draw0.invoke( listener ); 
+			} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
 	public boolean isInside ( float mx, float my ) {

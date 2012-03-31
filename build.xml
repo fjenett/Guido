@@ -30,10 +30,19 @@
 		</fileset>
 	</path>
 	
+	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+	           			   classpath="../_resources/closure-compiler/compiler.jar"/>
+	
+	<!-- + + + + + + + + + + + + + + + + + + + + + + +
+		HELP
+	 + + + + + + + + + + + + + + + + + + + + + + + -->
 	<target name="help">
 		<echo>HEELP!</echo>
 	</target>
-
+	
+	<!-- + + + + + + + + + + + + + + + + + + + + + + +
+		BUILD
+	 + + + + + + + + + + + + + + + + + + + + + + + -->
 	<target name="build">
 		
 		<mkdir dir="${build}" />
@@ -48,6 +57,9 @@
 		
 	</target>
 	
+	<!-- + + + + + + + + + + + + + + + + + + + + + + +
+		PACKAGE
+	 + + + + + + + + + + + + + + + + + + + + + + + -->
 	<target name="package" depends="build">
 		
 		<delete dir="${dist}" />
@@ -61,12 +73,22 @@
 			<fileset dir="examples" />
 		</copy>
 		
-		<concat destfile="${dist}/library/${lib.name}.js">
-			<fileset file="src_js/*.js" />
+		<concat destfile="${bin}/${lib.name}.js">
+			<fileset file="src-js/*.js" />
 		</concat>
+		
+		<jscomp compilationLevel="simple" warning="default" 
+		        debug="false" output="${dist}/library/${lib.name}.js">
+			<sources dir="${bin}">
+				<file name="${lib.name}.js" />
+			</sources>
+		</jscomp>
 		
 	</target>
 	
+	<!-- + + + + + + + + + + + + + + + + + + + + + + +
+		INSTALL
+	 + + + + + + + + + + + + + + + + + + + + + + + -->
 	<target name="install" depends="package" >
 		
 		<delete dir="${processing.libs}/${lib.name}" />

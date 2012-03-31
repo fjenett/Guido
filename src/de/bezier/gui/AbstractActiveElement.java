@@ -114,7 +114,12 @@ public abstract class AbstractActiveElement extends Basic2DElement
 		dragged = false;
 	}
 	
-	public void mouseScrolled ( int step ) {
+	public void mouseScrolled ( float step ) {
+		
+	}
+	
+	public void draw ()
+	{
 		
 	}
 }

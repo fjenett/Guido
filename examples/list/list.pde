@@ -91,7 +91,7 @@ public class Listbox
     }
     
     // called from manager
-    public void mouseDragged ( float mx, float my )
+    void mouseDragged ( float mx, float my )
     {
         if ( !hasSlider ) return;
         if ( mx < x+width-20 ) return;
@@ -99,6 +99,20 @@ public class Listbox
         valueY = my-10;
         valueY = constrain( valueY, y, y+height-20 );
         
+        update();
+    }
+    
+    // called from manager
+    void mouseScrolled ( float step )
+    {
+        valueY += step;
+        valueY = constrain( valueY, y, y+height-20 );
+        
+        update();
+    }
+    
+    void update ()
+    {
         float totalHeight = items.size() * itemHeight;
         float itemsInView = height / itemHeight;
         float listOffset = map( valueY, y, y+height-20, 0, totalHeight-height );

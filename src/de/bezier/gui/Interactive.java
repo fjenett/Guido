@@ -22,6 +22,8 @@ implements MouseWheelListener
 		{
 			papplet.frame.addMouseWheelListener(this);
 		}
+		
+		papplet.registerDraw( this );
 	}
 	
 	public static Interactive make ( PApplet papplet )
@@ -60,6 +62,15 @@ implements MouseWheelListener
 			}
 		}
 	}
+
+	public static boolean insideRect ( float x, float y, float width, float height, float mx, float my )
+	{
+		return mx >= x && mx <= x+width && my >= y && my <= y+height;
+	}
+	
+	//
+	//	instance methods
+	//
 	
 	public void mouseEvent ( MouseEvent evt )
 	{
@@ -219,6 +230,15 @@ implements MouseWheelListener
 				interActiveElement.mouseExited( );
 				interActiveElement.mouseExited( mx, my );
 			}
+		}
+	}
+	
+	public void draw ()
+	{
+		for ( AbstractActiveElement interActiveElement : interActiveElements )
+		{
+			if ( !interActiveElement.isActive() ) continue;
+			interActiveElement.draw();
 		}
 	}
 }

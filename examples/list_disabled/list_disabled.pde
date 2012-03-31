@@ -8,6 +8,7 @@ import de.bezier.gui.*;
 
 Listbox listbox;
 Object lastItemClicked;
+boolean showItem;
 
 void setup ()
 {
@@ -28,7 +29,10 @@ void setup ()
     // register it
     
     Interactive.add( listbox );
-    Interactive.setActive( listbox, false );
+    
+    // this disables the item
+    
+    Interactive.setActive( listbox, showItem );
 }
 
 void draw ()
@@ -42,10 +46,17 @@ void draw ()
     }
     else
     {
-        text( "Item is disabled ...", 30, 35 );
+        text( "Item is disabled ... hence it's not visible.\nPress 'v' to show", 30, 35 );
     }
+}
 
-    listbox.draw();
+void keyPressed ()
+{
+    if ( key == 'v' )
+    {
+        showItem = !showItem;
+        Interactive.setActive( listbox, showItem );
+    }
 }
 
 public void itemClicked ( int i, Object item )
@@ -76,17 +87,17 @@ public class Listbox
         height = hh;
     }
     
-    public boolean isActive ()
+    boolean isActive ()
     {
         return activated;
     }
     
-    public void setActive ( boolean tf )
+    void setActive ( boolean tf )
     {
         activated = tf;
     }
     
-    public void addItem ( String item )
+    void addItem ( String item )
     {
         if ( items == null ) items = new ArrayList();
         items.add( item );
@@ -94,20 +105,20 @@ public class Listbox
         hasSlider = items.size() * itemHeight > height;
     }
     
-    public void mouseMoved ( float mx, float my )
+    void mouseMoved ( float mx, float my )
     {
         if ( hasSlider && mx > width-20 ) return;
         
         hoverItem = listStartAt + int((my-y) / itemHeight);
     }
     
-    public void mouseExited ( float mx, float my )
+    void mouseExited ( float mx, float my )
     {
         hoverItem = -1;
     }
     
     // called from manager
-    public void mouseDragged ( float mx, float my )
+    void mouseDragged ( float mx, float my )
     {
         if ( !hasSlider ) return;
         if ( mx < x+width-20 ) return;
@@ -115,6 +126,20 @@ public class Listbox
         valueY = my-10;
         valueY = constrain( valueY, y, y+height-20 );
         
+        update();
+    }
+    
+    // called from manager
+    void mouseScrolled ( float step )
+    {
+        valueY += step;
+        valueY = constrain( valueY, y, y+height-20 );
+        
+        update();
+    }
+    
+    void update ()
+    {
         float totalHeight = items.size() * itemHeight;
         float itemsInView = height / itemHeight;
         float listOffset = map( valueY, y, y+height-20, 0, totalHeight-height );
@@ -122,7 +147,7 @@ public class Listbox
         listStartAt = int( listOffset / itemHeight );
     }
     
-    public void mousePressed ( float mx, float my )
+    void mousePressed ( float mx, float my )
     {
         if ( hasSlider && mx > width-20 ) return;
         
@@ -160,7 +185,7 @@ public class Listbox
     }
 
     // called from manager
-    public boolean isInside ( float mx, float my ) 
+    boolean isInside ( float mx, float my ) 
     {
         return mx >= x && mx <= x+width && my >= y && my <= y+height;
     }

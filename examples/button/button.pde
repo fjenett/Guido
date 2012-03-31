@@ -28,8 +28,6 @@ void setup ()
 void draw ()
 {
     background( 0 );
-
-    button.draw();
 }
 
 public class SimpleButton
@@ -37,7 +35,7 @@ public class SimpleButton
     float x, y, width, height;
     boolean on;
     
-    SimpleButton ( float x, float y, float w, float h ) 
+    SimpleButton ( float x, float y, float w, float h )
     {
         this.x = x;
         this.y = y;
@@ -47,7 +45,7 @@ public class SimpleButton
     
     // called by manager
     
-    public void mousePressed () 
+    void mousePressed () 
     {
         on = !on;
     }
@@ -62,7 +60,7 @@ public class SimpleButton
     
     // called by manager to see if mouse is over element
     
-    public boolean isInside ( float mx, float my ) 
+    boolean isInside ( float mx, float my ) 
     {
         return mx >= x && mx <= x+width && my >= y && my <= y+height;
     }

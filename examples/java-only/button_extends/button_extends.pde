@@ -22,8 +22,6 @@ void setup ()
 void draw ()
 {
     background( 0 );
-
-    button.draw();
 }
 
 class SimpleButton extends ActiveElement
