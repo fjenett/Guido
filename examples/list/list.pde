@@ -160,7 +160,7 @@ public class Listbox
     // called from manager
     public boolean isInside ( float mx, float my ) 
     {
-        return mx >= x && mx <= x+width && my >= y && my <= y+height;
+        return Interactive.insideRect(x,y,width,height,mx,my);
     }
 }
 

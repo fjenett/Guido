@@ -9,6 +9,53 @@ var Interactive = (function(){
 
     var interactiveInstance;
 
+	// this is taken from processing.js
+	// -------------------------------------
+	var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
+	var setStyleValues = function ( curElement ) {
+		if ( document.defaultView && document.defaultView.getComputedStyle ) {
+			var style = document.defaultView.getComputedStyle(curElement, null);
+		    stylePaddingLeft = parseInt( style['paddingLeft'], 10 ) || 0;
+		    stylePaddingTop = parseInt( style['paddingTop'], 10 ) || 0;
+		    styleBorderLeft = parseInt( style['borderLeftWidth'], 10 ) || 0;
+		    styleBorderTop = parseInt( style['borderTopWidth'], 10 ) || 0;
+		}
+	}
+	function calculateOffset(curElement, event) {
+      var element = curElement,
+        offsetX = 0,
+        offsetY = 0;
+
+      // Find element offset
+      if (element.offsetParent) {
+        do {
+          offsetX += element.offsetLeft;
+          offsetY += element.offsetTop;
+        } while (!!(element = element.offsetParent));
+      }
+
+      // Find Scroll offset
+      element = curElement;
+      do {
+        offsetX -= element.scrollLeft || 0;
+        offsetY -= element.scrollTop || 0;
+      } while (!!(element = element.parentNode));
+
+      // Add padding and border style widths to offset
+      offsetX += stylePaddingLeft;
+      offsetY += stylePaddingTop;
+
+      offsetX += styleBorderLeft;
+      offsetY += styleBorderTop;
+
+      // Take into account any scrolling done
+      offsetX += window.pageXOffset;
+      offsetY += window.pageYOffset;
+
+		return {X:offsetX, Y:offsetY};
+    }
+	// -------------------------------------
+
     // x-browser (?) addEventListener implementation
     var addEventListenerImpl = function( target, event, callback ) {
         if ( 'addEventListener' in target ) {
@@ -32,6 +79,8 @@ var Interactive = (function(){
         var opts = arguments[0];
 
         this.target = opts.target;
+		setStyleValues( this.target );
+		
         this.listeners = [];
 		
 		if ( opts.papplet && 'draw' in opts.papplet ) {
@@ -47,27 +96,33 @@ var Interactive = (function(){
 
         var events = [
             "mousemove", "mousedown", "mouseup", "click", "dblclick", 
-            "mouseover", "mouseout", "mouseenter", "mouseleave", "mousewheel"
+            "mouseover", "mouseout", "mouseenter", "mouseleave", "mousewheel",
+			"DOMMouseScroll"
         ];
         var eventDests = {
             "mousemove": "mouseMoved",
             "mousedown": "mousePressed",
             "dblclick": "mouseDoubleClicked",
             "mouseup": "mouseReleased",
-			"mousewheel": "mouseScrolled"
+			"mousewheel": "mouseScrolled",
+			"DOMMouseScroll": "mouseScrolled"
         };
         for ( var e in events ) {
             (function(manager, target, event, meth){
                 addEventListenerImpl( target, event, function( evt ){
 //                    console.log( event );
 //                    console.log( evt );
+					
+					var offset = calculateOffset( target, evt );
+					
                     for ( var l in manager.listeners ) {
 						if ( !( manager.listeners[l].isActive() ) ) continue;
                         if ( meth in manager.listeners[l] ) {
 							if ( meth == 'mouseScrolled' )
-								manager.listeners[l][meth]( evt.detail ? evt.detail * -1 : evt.wheelDelta / 40 );
+								manager.listeners[l][meth]( evt.detail ? evt.detail * -1 : evt.wheelDelta / 40,
+									 						evt.pageX - offset.X, evt.pageY - offset.Y );
 							else
-								manager.listeners[l][meth]( evt.offsetX, evt.offsetY );
+								manager.listeners[l][meth]( evt.pageX - offset.X, evt.pageY - offset.Y );
 						}
                     }
                 });
@@ -186,7 +241,7 @@ var Interactive = (function(){
                     if ( 'mouseEntered' in this.listener ) {
                         this.listener.mouseEntered( mx, my );
                     }
-                } else {
+                } else if ( nowInside ) {
                     if ( 'mouseMoved' in this.listener ) {
                         this.listener.mouseMoved( mx, my );
                     }
@@ -212,11 +267,11 @@ var Interactive = (function(){
             this.pressed = this.dragged = false;
         }
 
-		this.mouseScrolled = function ( step ) {
+		this.mouseScrolled = function ( step, mx, my ) {
             if ( !this.activated ) return;
 			//console.log( step );
 
-			if ( this.listener ) {
+			if ( this.listener.isInside( mx, my ) ) {
 				if ( 'mouseScrolled' in this.listener ) {
 					this.listener.mouseScrolled( step );
 					return;
