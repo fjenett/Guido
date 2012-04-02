@@ -1,8 +1,8 @@
-<project name="BezierGuiLib" default="install" basedir="./">
+<project name="Guido" default="install" basedir="./">
 
 	<!-- ++++++++++++++++++++++++++++++++++++++++++
 	
-		BezierGuiLib, yet another gui lib.
+		Guido, as in "GUI do!"
 		
 		I think ControlP5 is great but i always
 		have trouble extending it's elements. So
@@ -16,7 +16,7 @@
 	<property name="build" 		value="build" />
 	<property name="bin" 		value="bin" />
 	<property name="dist" 		value="dist" />
-	<property name="lib.name" 	value="BezierGuiLib" />
+	<property name="lib.name" 	value="Guido" />
 	<property name="java.target.version" 
 								value="1.5" />
 	

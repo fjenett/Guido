@@ -2,7 +2,7 @@
 	
 This is a simple cross mode GUI library for the Processings.
 	
-Why the heck is it called Guido? ... _GUI, do?_ Yeah, i know ...
+Why the heck is it called Guido? ... _GUI, do?_
 	
 ***Installing***
 
