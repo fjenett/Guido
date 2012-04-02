@@ -98,6 +98,10 @@
 			<fileset dir="${dist}" />
 		</copy>
 		
+		<copy todir="${lib.name}">
+			<fileset dir="${dist}" />
+		</copy>
+		
 	</target>
 
 </project>
