@@ -2,7 +2,7 @@
  *    Multi-slider
  */
 
-import de.bezier.gui.*;
+import de.bezier.guido.*;
 
 MultiSlider slider;
 
