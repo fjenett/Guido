@@ -1,6 +1,7 @@
 
 bin
 dist
+legacy/*
 legacy
 web-export
 
