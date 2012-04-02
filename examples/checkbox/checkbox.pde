@@ -2,7 +2,7 @@
  *    Example checkbox
  */
 
-import de.bezier.gui.*;
+import de.bezier.guido.*;
 
 ArrayList<CheckBox> checkboxes;
 

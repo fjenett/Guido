@@ -4,7 +4,7 @@
  *    .. works with JavaScript mode since Processing 2.0a5
  */
 
-import de.bezier.gui.*;
+import de.bezier.guido.*;
 
 Listbox listbox;
 Object lastItemClicked;

@@ -4,7 +4,7 @@
  *    Does not work with JavaScript mode!
  */
 
-import de.bezier.gui.*;
+import de.bezier.guido.*;
 
 SimpleButton button;
 
