@@ -92,7 +92,7 @@ var Interactive = (function(){
 			opts.papplet.draw = (function(ia,pa,ds){
 				return function(){
 					ia.preDraw(pa);
-					ds();
+					ds.apply(pa);
 					ia.postDraw(pa);
 				};
 			})(this, opts.papplet, drawStored);
@@ -148,7 +148,7 @@ var Interactive = (function(){
 			if ( this.listeners ) {
 				for ( var l in this.listeners ) {
 					if ( 'draw' in this.listeners[l] ) {
-						this.listeners[l].draw();
+						this.listeners[l].draw( papplet );
 					}
 				}
 			}
@@ -204,7 +204,9 @@ var Interactive = (function(){
 				}
 			} else {
 	        	alert( "Interactive: listener must implement\n" +
-		   			   "public boolean isInside (float mx, float my)" );
+		   			   "\tpublic boolean isInside (float mx, float my)\n" +
+		 			   "or must have fields\n" +
+		  			   "\tfloat x, y, width, height;" );
 			}
         }
 
@@ -322,7 +324,7 @@ var Interactive = (function(){
 			if ( !(this.activated) ) return;
 			if ( this.listener ) {
 				if ( 'draw' in this.listener ) {
-					return this.listener.draw();
+					return this.listener.draw( papplet );
 				}
 			}
 		}
