@@ -1,5 +1,5 @@
 /**
- *    Simple button.
+ *    Simple buttons
  *
  *    .. works with JavaScript mode since Processing 2.0a5
  */
@@ -16,13 +16,16 @@ void setup ()
     
     Interactive.make( this );
     
-    // create a button
+    // create some buttons
     
-    button = new SimpleButton(20, 20, 20, 20);
-    
-    // register button
-    
-    Interactive.add( button );
+    int w = (width-20)/20;
+    for ( int ix = 20, k = width-w; ix <= k; ix += 2*w )
+    {
+        for ( int iy = 20, n = height-w; iy <= n; iy += 2*w )
+        {
+            new SimpleButton( ix, iy, w, w );
+        }
+    }
 }
 
 void draw ()
@@ -35,12 +38,11 @@ public class SimpleButton
     float x, y, width, height;
     boolean on;
     
-    SimpleButton ( float x, float y, float w, float h )
+    SimpleButton ( float xx, float yy, float w, float h )
     {
-        this.x = x;
-        this.y = y;
-        width = w;
-        height = h;
+        x = xx; y = yy; width = w; height = h;
+        
+        Interactive.add( this ); // register it with the manager
     }
     
     // called by manager

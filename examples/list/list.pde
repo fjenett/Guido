@@ -2,6 +2,8 @@
  *    A list
  *
  *    .. works with JavaScript mode since Processing 2.0a5
+ *
+ *    Make sure to try your scroll wheel!
  */
 
 import de.bezier.guido.*;
@@ -24,10 +26,6 @@ void setup ()
     {
         listbox.addItem( "Item " + i );
     }
-    
-    // register it
-    
-    Interactive.add( listbox );
 }
 
 void draw ()
@@ -39,8 +37,6 @@ void draw ()
         fill( 255 );
         text( "Clicked " + lastItemClicked.toString(), 30, 35 );
     }
-
-    listbox.draw();
 }
 
 public void itemClicked ( int i, Object item )
@@ -62,12 +58,13 @@ public class Listbox
     
     Listbox ( float xx, float yy, float ww, float hh ) 
     {
-        x = xx;
-        y = yy;
+        x = xx; y = yy;
         valueY = y;
         
-        width = ww;
-        height = hh;
+        width = ww; height = hh;
+        
+        // register it
+        Interactive.add( this );
     }
     
     public void addItem ( String item )
@@ -155,12 +152,6 @@ public class Listbox
             fill( 120 );
             rect( x+width-20, valueY, 20, 20 );
         }
-    }
-
-    // called from manager
-    public boolean isInside ( float mx, float my ) 
-    {
-        return Interactive.insideRect(x,y,width,height,mx,my);
     }
 }
 

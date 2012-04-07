@@ -29,7 +29,7 @@ void draw ()
         else
             stroke( map(f, slider.values[1], 1, 0, 255) );
             
-        line( f * width, 0, f * width, height );
+        line( i, 0, i, height );
     }
     
     slider.draw();

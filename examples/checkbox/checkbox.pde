@@ -1,10 +1,8 @@
 /**
- *    Example checkbox
+ *    Example checkboxes
  */
 
 import de.bezier.guido.*;
-
-ArrayList<CheckBox> checkboxes;
 
 void setup ()
 {
@@ -12,18 +10,14 @@ void setup ()
     
     Interactive.make(this);
     
-    checkboxes = new ArrayList();
-    
     for ( int i = 0; i < height-60; i+= 37 ) {
-        CheckBox c = new CheckBox( "Example checkbox", 30, 30+i, 10, 10 );
-        Interactive.add( c );
-        checkboxes.add( c );
+        new CheckBox( "Checkbox #"+(i+1), 30, 30+i, 10, 10 );
     }
 }
 
 void draw ()
 {
-    background( 90, 80, 70 );
+    background( 50 );
 }
 
 public class CheckBox
@@ -37,6 +31,7 @@ public class CheckBox
     {
         label = l;
         x = xx; y = yy; width = ww; height = hh;
+        Interactive.add( this );
     }
     
     void mouseReleased ()
@@ -58,6 +53,8 @@ public class CheckBox
         textAlign( LEFT );
         text( label, x+width+padx, y+height );
     }
+    
+    // this is a special inside test that includes the label text
     
     boolean isInside ( float mx, float my )
     {

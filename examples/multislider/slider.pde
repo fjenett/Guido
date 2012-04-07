@@ -15,7 +15,7 @@ public class MultiSlider
         left  = new SliderHandle( x, y, height, height );
         right = new SliderHandle( x+width-height, y, height, height );
         
-        values = new float[2]{0,1};
+        values = new float[]{0,1};
     }
     
     void mouseEntered ()

@@ -1,7 +1,9 @@
 /**
  *    A list
  *
- *    .. works with JavaScript mode since Processing 2.0a5
+ *    .. works with JavaScript mode since Processing 2.0a5.
+ *
+ *    Make sure to try your scroll wheel!
  */
 
 import de.bezier.guido.*;
@@ -25,10 +27,6 @@ void setup ()
     {
         listbox.addItem( "Item " + i );
     }
-    
-    // register it
-    
-    Interactive.add( listbox );
     
     // this disables the item
     
@@ -79,12 +77,13 @@ public class Listbox
     
     Listbox ( float xx, float yy, float ww, float hh ) 
     {
-        x = xx;
-        y = yy;
+        x = xx; y = yy;
         valueY = y;
         
-        width = ww;
-        height = hh;
+        width = ww; height = hh;
+    
+        // register it
+        Interactive.add( this );
     }
     
     boolean isActive ()
@@ -158,14 +157,15 @@ public class Listbox
     void draw ()
     {
         noStroke();
-        fill( 100 );
+        fill( activated ? 100 : 20 );
         rect( x,y,this.width,this.height );
+        
         if ( items != null )
         {
             for ( int i = 0; i < int(height/itemHeight) && i < items.size(); i++ )
             {
                 stroke( 80 );
-                fill( (i+listStartAt) == hoverItem ? 200 : 120 );
+                fill( (activated && (i+listStartAt) == hoverItem) ? 200 : 120 );
                 rect( x, y + (i*itemHeight), this.width, itemHeight );
                 
                 noStroke();
@@ -182,12 +182,6 @@ public class Listbox
             fill( 120 );
             rect( x+width-20, valueY, 20, 20 );
         }
-    }
-
-    // called from manager
-    boolean isInside ( float mx, float my ) 
-    {
-        return mx >= x && mx <= x+width && my >= y && my <= y+height;
     }
 }
 

@@ -1,11 +1,15 @@
 //
 //	Taking a whole hearted stab at including a js lib alongside Java.
 //
-//	fjenett - 2012-03
+//	fjenett - 2012-04
 //
 
 if ( !Interactive ) {
 var Interactive = (function(){
+	
+    // -----------------------------------------
+    //   private variables and functions
+    // -----------------------------------------
 
     var interactiveInstance;
 
@@ -71,7 +75,7 @@ var Interactive = (function(){
     };
 
     // -----------------------------------------
-    //   class definition
+    //   class Interactive
     // -----------------------------------------
 
     var Interactive = function () {
@@ -120,9 +124,11 @@ var Interactive = (function(){
                         if ( meth in manager.listeners[l] ) {
 							if ( meth == 'mouseScrolled' )
 								manager.listeners[l][meth]( evt.detail ? evt.detail * -1 : evt.wheelDelta / 40,
-									 						evt.pageX - offset.X, evt.pageY - offset.Y );
+									 						evt.pageX - offset.X, 
+															evt.pageY - offset.Y );
 							else
-								manager.listeners[l][meth]( evt.pageX - offset.X, evt.pageY - offset.Y );
+								manager.listeners[l][meth]( evt.pageX - offset.X, 
+															evt.pageY - offset.Y );
 						}
                     }
                 });
@@ -180,6 +186,10 @@ var Interactive = (function(){
 	{
 		return mx >= x && mx <= x+width && my >= y && my <= y+height;
 	}
+
+    // -----------------------------------------
+    //   class ActiveElement
+    // -----------------------------------------
 	
     var ActiveElement = function () {
 
@@ -206,7 +216,7 @@ var Interactive = (function(){
 		this.activated = true;
 
         this.mousePressed = function ( mx, my ) {
-            if ( !this.activated ) return;
+            if ( !(this.activated) ) return;
 			
 			this.pressed = this.listener.isInside( mx, my );
 				
@@ -221,7 +231,7 @@ var Interactive = (function(){
         }
 
         this.mouseDoubleClicked = function ( mx, my ) {
-            if ( !this.activated ) return;
+            if ( !(this.activated) ) return;
 
             if ( this.listener.isInside( mx, my ) ) {
                 if ( 'mouseDoubleClicked' in this.listener )
@@ -230,7 +240,7 @@ var Interactive = (function(){
         }
 
         this.mouseMoved = function ( mx, my ) {
-            if ( !this.activated ) return;
+            if ( !(this.activated) ) return;
 
             this.dragged = this.pressed;
             if ( this.dragged ) {
@@ -262,7 +272,7 @@ var Interactive = (function(){
         }
 
         this.mouseReleased = function ( mx, my ) {
-            if ( !this.activated ) return;
+            if ( !(this.activated) ) return;
 
             if ( this.dragged ) {
                 this.draggedDistX = this.clickedMouseX - mx;
@@ -278,7 +288,7 @@ var Interactive = (function(){
         }
 
 		this.mouseScrolled = function ( step, mx, my ) {
-            if ( !this.activated ) return;
+            if ( !(this.activated) ) return;
 			//console.log( step );
 
 			if ( this.listener.isInside( mx, my ) ) {
@@ -290,15 +300,15 @@ var Interactive = (function(){
 		}
 
 		this.setActive = function ( state ) {
+			this.activated = state;
 			if ( this.listener ) {
 				if ( 'setActive' in this.listener ) {
 					this.listener.setActive( state );
 					return;
 				}
 			}
-			this.activated = state;
 		}
-
+		
 		this.isActive = function () {
 			if ( this.listener ) {
 				if ( 'isActive' in this.listener ) {
@@ -309,6 +319,7 @@ var Interactive = (function(){
 		}
 		
 		this.draw = function ( papplet ) {
+			if ( !(this.activated) ) return;
 			if ( this.listener ) {
 				if ( 'draw' in this.listener ) {
 					return this.listener.draw();

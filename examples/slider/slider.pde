@@ -19,17 +19,11 @@ void setup ()
     // create a slider
     
     slider = new Slider(0, 0, width, 20);
-    
-    // register it
-    
-    Interactive.add( slider );
 }
 
 void draw ()
 {
     background( 0 );
-
-    slider.draw();
     
     fill( 255 - (slider.value * 255) );
     ellipse( width/2, height/2, 150, 150 );
@@ -44,14 +38,14 @@ public class Slider
     
     Slider ( float xx, float yy, float ww, float hh ) 
     {
-        x = xx;
-        y = yy;
-        width = ww;
-        height = hh;
+        x = xx; y = yy; width = ww; height = hh;
+    
+        // register it
+        Interactive.add( this );
     }
     
     // called from manager
-    public void mouseDragged ( float mx, float my )
+    void mouseDragged ( float mx, float my )
     {
         valueX = mx - height/2;
         
@@ -70,12 +64,6 @@ public class Slider
         
         fill( 120 );
         rect( valueX, y, height, height );
-    }
-    
-    // called from manager
-    public boolean isInside ( float mx, float my ) 
-    {
-        return mx >= x && mx <= x+width && my >= y && my <= y+height;
     }
 }
 
