@@ -10,6 +10,10 @@ The future 2.0 Processing will have ["modes"](http://wiki.processing.org/w/JavaS
 As of Processing 2.0 you should use the "Library Manager" built into the PDE. From the menu:
 Sketch > Import Library ... > Add Library ...
 
+Select "GUI" from the filter menu at top, or type guido into search.
+
+Select "Guido" in the list and click "Install" button on the right.
+ 
 ***Installing manually***
 
 Download [latest](https://github.com/fjenett/Guido/Guido.zip), unzip and move the folder to your sketchbooks "libraries" folder.
