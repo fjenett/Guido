@@ -88,4 +88,13 @@ public class DeBezierGuiGuiObject
 	        }	
 		}
     }
+
+	static public Object get ( Object obj, Field field ) throws java.lang.IllegalAccessException
+    {
+        if ( obj == null || field == null ) return null;
+
+		field.setAccessible( true );
+
+        return field.get( obj );
+    }
 }

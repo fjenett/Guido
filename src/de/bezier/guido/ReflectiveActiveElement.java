@@ -7,7 +7,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	private boolean debug = false;
 	
 	Object listener;
-	Method setter;
+	Method setter, getter;
 	Method mouseEntered0, mouseEntered2,
 	mouseMoved0, mouseMoved2,
 	mouseExited0, mouseExited2,
@@ -40,6 +40,15 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 			setter = sClass.getMethod( "set", Object.class, Object.class );
 			if (debug) System.out.println( setter );
 			
+		} catch ( Exception e ) {
+			if (debug) e.printStackTrace();
+		}
+		
+		try {
+			Class sClass = Class.forName( "DeBezierGuiGuiObject" );
+			getter = sClass.getMethod( "get", Object.class, Field.class );
+			if (debug) System.out.println( getter );
+
 		} catch ( Exception e ) {
 			if (debug) e.printStackTrace();
 		}
@@ -255,6 +264,24 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	}
 	
 	private boolean isInsideFromFields ( float mx, float my ) {
-		return super.isInside( mx, my );
+		if ( fieldX == null || fieldY == null || fieldWidth == null || fieldHeight == null )
+			return super.isInside( mx, my );
+		else if ( getter != null )
+		{
+			try {
+				
+				float x = 		(Float)(getter.invoke( null, this.listener, fieldX ));
+				float y = 		(Float)(getter.invoke( null, this.listener, fieldY ));
+				float width = 	(Float)(getter.invoke( null, this.listener, fieldWidth ));
+				float height = 	(Float)(getter.invoke( null, this.listener, fieldHeight ));
+				
+				return Interactive.insideRect( x, y, width, height, mx, my );
+				
+			} catch ( Exception e ) {
+				if (debug) e.printStackTrace();
+			}
+		}
+		System.err.println( "Unable to set from fields." );
+		return false;
 	}
 }

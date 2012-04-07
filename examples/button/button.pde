@@ -57,12 +57,5 @@ public class SimpleButton
         
         rect(x, y, width, height);
     }
-    
-    // called by manager to see if mouse is over element
-    
-    boolean isInside ( float mx, float my ) 
-    {
-        return mx >= x && mx <= x+width && my >= y && my <= y+height;
-    }
 }
 
