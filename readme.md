@@ -17,6 +17,13 @@ Select "GUI" from the filter menu at top, or type guido into search.
 
 Select "Guido" in the list and click "Install" button on the right.
 
+***Installing ... manually***
+
+Download [Guido.zip](https://github.com/downloads/fjenett/Guido/Guido.zip)
+Unzip inside your sketchbook
+Restart Processing
+Try examples
+
 ***Getting started***
 
 Guido wants you to write your own interface elements, it does not provide them by default as other great GUI libs do. It comes with examples of standard elements which should you get started. If you come up with something cool, consider sharing it to be included as example.
