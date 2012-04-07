@@ -69,3 +69,5 @@ Guido is mainly an event manager that collects and distributes events to interfa
 	        rect( x, y, width, height );
 	    }
 	}
+
+For a full overview of all available callbacks and their different forms open the ReflectiveActiveElement reference included in the download.

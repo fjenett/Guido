@@ -5,6 +5,19 @@ import java.util.*;
 import java.awt.event.*;
 import java.lang.reflect.*;
 
+/**
+ *	<h1>This is the main element for you to use.</h1>
+ *
+ *	<p>
+ *	The normal setup would be to create a class implementing some of the callbacks
+ *  provided by Guido and then register it with the manager.
+ *  </p>
+ *
+ *  <p>
+ *	See <a href="ReflectiveActiveElement.html">ReflectiveActiveElement</a> for a list 
+ *	of all available callbacks and their forms.
+ *	</p>
+ */
 public class Interactive 
 implements MouseWheelListener
 {
@@ -26,6 +39,11 @@ implements MouseWheelListener
 		papplet.registerDraw( this );
 	}
 	
+	/**
+	 *	Main entry point for PApplet (from your sketch).
+	 *
+	 *	@param papplet Your sketch
+	 */
 	public static Interactive make ( PApplet papplet )
 	{
 		if ( manager == null )
@@ -33,6 +51,11 @@ implements MouseWheelListener
 		return manager;
 	}
 	
+	/**
+	 *	Get the actual manager instance.
+	 *
+	 *	@return the Interactive instance which is the actual manager, or null
+	 */
 	public static Interactive get ()
 	{
 		if ( manager == null )
@@ -42,7 +65,13 @@ implements MouseWheelListener
 		return manager;
 	}
 	
-	public static void setActive ( Object o, boolean tf )
+	/**
+	 *	Activate or deactivate and interface element.
+	 *
+	 *	@param element  the interface element
+	 *	@param state	the state: true for active, false to deactivate
+	 */
+	public static void setActive ( Object element, boolean state )
 	{
 		if ( manager != null )
 		{
@@ -50,28 +79,134 @@ implements MouseWheelListener
 			{
 				if ( interActiveElement.getClass().equals( ReflectiveActiveElement.class ) )
 				{
-					if ( ((ReflectiveActiveElement)interActiveElement).listener == o )
+					if ( ((ReflectiveActiveElement)interActiveElement).listener == element )
 					{
-						interActiveElement.setActive(tf);
+						interActiveElement.setActive( state );
 					}
 				}
-				else if ( interActiveElement == o )
+				else if ( interActiveElement == element )
 				{	
-					interActiveElement.setActive(tf);
+					interActiveElement.setActive( state );
 				}
 			}
 		}
 	}
 
+	/**
+	 *	A utility function to do a simple box test.
+	 *
+	 *	@param	x 		left coordinate
+	 *	@param	y		top coordinate
+	 *	@param	width 	width of the rectangle
+	 *	@param	height 	height of the rectangle
+	 *	@param	mx		x of point to test
+	 *	@param	my		y of point to test
+	 *  @return 		true if the point is inside the rectangle
+	 */
 	public static boolean insideRect ( float x, float y, float width, float height, float mx, float my )
 	{
 		return mx >= x && mx <= x+width && my >= y && my <= y+height;
 	}
+
+	/**
+	 *	Add an element to the manager to be managed.
+	 *
+	 *	<p>The easiest way to use this is inside your elements constructor:
+	 *  <code>
+	 *	public class YourElement {
+	 *		YourElement () {
+	 *			Interactive.add( this );
+	 *		}
+	 *	}
+	 *  </code></p>
+	 *
+	 *	@param element the element to manage
+	 */
+	public static void add ( Object element )
+	{
+		if ( manager == null) {
+			System.err.println( "You need to call Interactive.make() first." );
+			return;
+		}
+
+		Class klass = element.getClass();
+		while ( klass != null ) {
+			if ( klass == AbstractActiveElement.class ) return;
+			klass = klass.getSuperclass();
+		}
+
+		// this adds itself to Interactive in constructor
+		new ReflectiveActiveElement( element );
+	}
 	
-	//
+	// ------------------------------------------
 	//	instance methods
-	//
+	// ------------------------------------------
 	
+	/**
+	 *	Callback for Component.addMouseWheelListener()
+	 *
+	 *	@param e the mouse wheel (scroll) event
+	 *  @see java.awt.Component#addMouseWheelListener(java.awt.event.MouseWheelListener)
+	 */
+	public void mouseWheelMoved ( MouseWheelEvent e ) 
+	{
+		int step = e.getWheelRotation();
+		for ( AbstractActiveElement interActiveElement : interActiveElements )
+		{
+			if ( !interActiveElement.isActive() ) continue;
+
+			interActiveElement.mouseScrolled( step );
+			
+			float mx = papplet.mouseX;
+			float my = papplet.mouseY;
+			boolean wasHover = interActiveElement.hover;
+			interActiveElement.hover = interActiveElement.isInside( mx, my );
+			if ( interActiveElement.hover && !wasHover )
+			{
+				interActiveElement.mouseEntered( );
+				interActiveElement.mouseEntered( mx, my );
+			}
+			else if ( !interActiveElement.hover && wasHover )
+			{
+				interActiveElement.mouseExited( );
+				interActiveElement.mouseExited( mx, my );
+			}
+		}
+	}
+	
+	/**
+	 *	Add an element to the manager, mainly used internally.
+	 *
+	 *	@param activeElement the element to manage
+	 */
+	public void addElement ( AbstractActiveElement activeElement )
+	{
+		if ( interActiveElements == null ) 
+			interActiveElements = new ArrayList<AbstractActiveElement>();
+		if ( !interActiveElements.contains(activeElement) )
+			interActiveElements.add( activeElement );
+	}
+	
+	/**
+	 *	Callback for PApplet.registerDraw()
+	 *
+	 *	@see <a href="http://processing.googlecode.com/svn/trunk/processing/build/javadoc/core/processing/core/PApplet.html#registerDraw(java.lang.Object)">PApplet.registerDraw( Object obj )</a>
+	 */
+	public void draw ()
+	{
+		for ( AbstractActiveElement interActiveElement : interActiveElements )
+		{
+			if ( !interActiveElement.isActive() ) continue;
+			interActiveElement.draw();
+		}
+	}
+	
+	/**
+	 *	Callback for PApplet.registerMouseEvent()
+	 *
+	 *	@see <a href="http://processing.googlecode.com/svn/trunk/processing/build/javadoc/core/processing/core/PApplet.html#registerMouseEvent(java.lang.Object)">PApplet.registerMouseEvent(Object obj)</a>
+	 */
 	public void mouseEvent ( MouseEvent evt )
 	{
 		if ( interActiveElements == null ) return;
@@ -180,65 +315,5 @@ implements MouseWheelListener
 	}
 	
 	private void mouseExited ( MouseEvent evt ) {
-	}
-	
-	public static void add ( Object listener )
-	{
-		if ( manager == null) {
-			System.err.println( "You need to call Interactive.make() first." );
-			return;
-		}
-		
-		Class klass = listener.getClass();
-		while ( klass != null ) {
-			if ( klass == AbstractActiveElement.class ) return;
-			klass = klass.getSuperclass();
-		}
-		
-		// this adds itself to Interactive in constructor
-		new ReflectiveActiveElement( listener );
-	}
-
-	public void addElement ( AbstractActiveElement activeElement )
-	{
-		if ( interActiveElements == null ) 
-			interActiveElements = new ArrayList<AbstractActiveElement>();
-		if ( !interActiveElements.contains(activeElement) )
-			interActiveElements.add( activeElement );
-	}
-
-	public void mouseWheelMoved ( MouseWheelEvent e ) 
-	{
-		int step = e.getWheelRotation();
-		for ( AbstractActiveElement interActiveElement : interActiveElements )
-		{
-			if ( !interActiveElement.isActive() ) continue;
-
-			interActiveElement.mouseScrolled( step );
-			
-			float mx = papplet.mouseX;
-			float my = papplet.mouseY;
-			boolean wasHover = interActiveElement.hover;
-			interActiveElement.hover = interActiveElement.isInside( mx, my );
-			if ( interActiveElement.hover && !wasHover )
-			{
-				interActiveElement.mouseEntered( );
-				interActiveElement.mouseEntered( mx, my );
-			}
-			else if ( !interActiveElement.hover && wasHover )
-			{
-				interActiveElement.mouseExited( );
-				interActiveElement.mouseExited( mx, my );
-			}
-		}
-	}
-	
-	public void draw ()
-	{
-		for ( AbstractActiveElement interActiveElement : interActiveElements )
-		{
-			if ( !interActiveElement.isActive() ) continue;
-			interActiveElement.draw();
-		}
 	}
 }

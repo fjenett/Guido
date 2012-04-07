@@ -3,8 +3,16 @@
 
 import java.lang.reflect.*;
 
+/**
+ *	This is a .. well, a hack to be able to read / write fields of
+ *	objects that are not inside a package. Normally this is not permitted
+ *	by the Java security manager.
+ */
 public class DeBezierGuiGuiObject
 {
+	/**
+	 *	Set an objects fields from matching fields in another object.
+	 */
     static public void set ( Object obj, Object args )
     {
         if ( obj == null || args == null ) return;
@@ -45,6 +53,12 @@ public class DeBezierGuiGuiObject
         }
     }
 
+	/**
+	 *	Set an objects fields from an array of objects by treating
+	 *	subsequent elements as key-value pairs.
+	 *
+	 * 	set( receiver, ["field1", value1, "field2", value2] )
+	 */
 	static public void set ( Object obj, Object[] args )
     {
         if ( obj == null || args == null || (args.length % 2) != 0 ) return;
@@ -89,6 +103,9 @@ public class DeBezierGuiGuiObject
 		}
     }
 
+	/**
+	 *	Get value of a given field from an object.
+	 */
 	static public Object get ( Object obj, Field field ) throws java.lang.IllegalAccessException
     {
         if ( obj == null || field == null ) return null;
