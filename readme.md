@@ -4,6 +4,8 @@ This is a simple cross mode GUI library for the Processings.
 
 What does cross mode mean and why "the Processings"?
 The future 2.0 Processing will have ["modes"](http://wiki.processing.org/w/JavaScript) which are additional language flavours to write and use Processing in. One is the then included JavaScript mode which is based upon [Processing.js](https://github.com/processing-js/processing-js). Guido is an attempt at writing a GUI library that supports both Java and JavaScript, so any sketch using it should run on both modes.
+
+Guido wants you to write your own interface elements, it does not provide them by default as other great GUI libs do. It comes with examples of standard elements which should you get started. If you come up with something cool, consider sharing it to be included as example.
 	
 ***Installing***
 
