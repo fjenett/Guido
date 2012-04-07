@@ -9,7 +9,10 @@
 	</description>
 	
 	<property name="libraryName" 	value="Guido" />
-	<property name="versionNumber"  value="0.0.1" />
+	<property name="versionNumber"  value="0.0.2" />
+	<property name="author" 		value="Florian Jenett"/>
+	<property name="copyright" 		value="(c) 2012"/>
+	
 	<buildnumber file="resources/build.number" />
 	
 	<property name="src" 		 	value="src" />
