@@ -1,6 +1,6 @@
 <project name="Guido" default="install" basedir="./">
 
-	<!-- ++++++++++++++++++++++++++++++++++++++++++
+	<description>
 	
 		Guido, as in "GUI do!"
 		
@@ -10,19 +10,23 @@
 		focused on being extendible and to test
 		some new ideas ..
 	
-	+++++++++++++++++++++++++++++++++++++++++++ -->
+	</description>
 	
-	<property name="src" 		value="src" />
-	<property name="build" 		value="build" />
-	<property name="bin" 		value="bin" />
-	<property name="dist" 		value="dist" />
-	<property name="lib.name" 	value="Guido" />
+	<property name="libraryName" 	value="Guido" />
+	<property name="versionNumber"  value="0.0.1" />
+	
+	<property name="src" 		 	value="src" />
+	<property name="bin" 		 	value="bin" />
+	<property name="dist" 		 	value="${libraryName}" />
+	
 	<property name="java.target.version" 
-								value="1.5" />
+								 	value="1.5" />
 	
 	<!--property name="processing.classes" location="/Applications/Processing.app/Contents/Resources/Java/"/-->
-	<property name="processing.classes" location="/Users/fjenett/Repos/processing/processing/build/macosx/work/Processing.app/Contents/Resources/Java/"/>
-	<property name="processing.libs" location="/Users/fjenett/Documents/Processing/libraries"/>	
+	<property name="processing.classes" 
+			  location="/Users/fjenett/Repos/processing/processing/build/macosx/work/Processing.app/Contents/Resources/Java/"/>
+	<property name="processing.libs" 
+			  location="/Users/fjenett/Documents/Processing/libraries"/>	
 
 	<path id="library-classpath">
 		<fileset dir="${processing.classes}" >
@@ -31,21 +35,13 @@
 	</path>
 	
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
-	           			   classpath="../_resources/closure-compiler/compiler.jar"/>
-	
-	<!-- + + + + + + + + + + + + + + + + + + + + + + +
-		HELP
-	 + + + + + + + + + + + + + + + + + + + + + + + -->
-	<target name="help">
-		<echo>HEELP!</echo>
-	</target>
+	           			   classpath="../_resources/closure-compiler/compiler.jar" />
 	
 	<!-- + + + + + + + + + + + + + + + + + + + + + + +
 		BUILD
 	 + + + + + + + + + + + + + + + + + + + + + + + -->
 	<target name="build">
 		
-		<mkdir dir="${build}" />
 		<delete dir="${bin}" />
 		<mkdir dir="${bin}" />
 		
@@ -54,6 +50,10 @@
 				<path refid="library-classpath"/>
 			</classpath>
 		</javac>
+		
+		<concat destfile="${bin}/${libraryName}.js">
+			<fileset file="src-js/*.js" />
+		</concat>
 		
 	</target>
 	
@@ -66,24 +66,55 @@
 		<mkdir dir="${dist}" />
 		<mkdir dir="${dist}/library" />
 		
-		<jar jarfile="${dist}/library/${lib.name}.jar" basedir="${bin}"/>
+		<jar jarfile="${dist}/library/${libraryName}.jar" basedir="${bin}"/>
+
+		<jscomp compilationLevel="simple" 
+				warning="default" 
+		        debug="false" 
+				output="${dist}/library/${libraryName}.js"
+				prettyprint="true" >
+			<sources dir="${bin}">
+				<file name="${libraryName}.js" />
+			</sources>
+		</jscomp>
 		
 		<mkdir dir="${dist}/examples" />
 		<copy todir="${dist}/examples">
 			<fileset dir="examples" />
 		</copy>
 		
-		<concat destfile="${bin}/${lib.name}.js">
-			<fileset file="src-js/*.js" />
-		</concat>
+		<copy todir="${dist}">
+			<fileset file="resources/library.properties" />
+			<fileset file="readme.md" />
+		</copy>
+		<replaceregexp file="${dist}/library.properties" flags="g"
+  					   match="@@VERSION@@" replace="${build.number}" />
+		<replaceregexp file="${dist}/library.properties" flags="g"
+  					   match="@@PRETTYVERSION@@" replace="${versionNumber}" />
 		
-		<jscomp compilationLevel="simple" warning="default" 
-		        debug="false" output="${dist}/library/${lib.name}.js">
-			<sources dir="${bin}">
-				<file name="${lib.name}.js" />
-			</sources>
-		</jscomp>
+	</target>
+	
+	<!-- + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+		DOCUMENTATION
+	 + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
+	<target name="documentation" depends="package">
 		
+		<mkdir dir="${dist}/documentation" />
+	 	<javadoc bottom="processing library ${libraryName} by ${author}. ${copyright}"
+				 destdir="${dist}/documentation" 
+				 verbose="false" 
+				 stylesheetfile="resources/stylesheet.css" 
+				 doctitle="${libraryName} Java documentation" 
+				 public="true" version="false" 
+				 windowtitle="${libraryName} Java documentation">
+	 		<fileset dir="${src}" defaultexcludes="yes">
+				<include name="**/*"/>
+			</fileset>
+			<classpath>
+				<path refid="library-classpath" />
+			</classpath>
+	 	</javadoc>
+
 	</target>
 	
 	<!-- + + + + + + + + + + + + + + + + + + + + + + +
@@ -91,16 +122,46 @@
 	 + + + + + + + + + + + + + + + + + + + + + + + -->
 	<target name="install" depends="package" >
 		
-		<delete dir="${processing.libs}/${lib.name}" />
-		<mkdir dir="${processing.libs}/${lib.name}" />
+		<delete dir="${processing.libs}/${libraryName}" />
+		<mkdir dir="${processing.libs}/${libraryName}" />
 		
-		<copy todir="${processing.libs}/${lib.name}">
+		<copy todir="${processing.libs}/${libraryName}">
 			<fileset dir="${dist}" />
 		</copy>
 		
-		<copy todir="${lib.name}">
+		<copy todir="${libraryName}">
 			<fileset dir="${dist}" />
 		</copy>
+		
+	</target>
+	
+	<!-- + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+		RELEASE
+	 + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
+	<target name="release" depends="documentation">
+		
+	  	<zip destfile="releases/${libraryName}-${versionNumber}.zip"
+	  	     basedir="${dist}"
+	  	     excludes="**/_DS.Store"
+		/>
+		
+		<copy tofile="releases/${libraryName}.zip">
+			<fileset file="releases/${libraryName}-${versionNumber}.zip" />
+		</copy>
+		<copy tofile="releases/${libraryName}.txt">
+			<fileset file="${dist}/library.properties" />
+		</copy>
+		
+	</target>
+
+	<!-- + + + + + + + + + + + + + + + + + + + + + + +
+		CLEAN
+	 + + + + + + + + + + + + + + + + + + + + + + + -->
+	<target name="clean">
+		
+		<delete dir="${bin}" />
+		<delete dir="${dist}" />
+		<delete dir="${libraryName}" />
 		
 	</target>
 

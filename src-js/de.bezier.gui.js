@@ -180,13 +180,22 @@ var Interactive = (function(){
 	{
 		return mx >= x && mx <= x+width && my >= y && my <= y+height;
 	}
-
+	
     var ActiveElement = function () {
 
         this.listener = arguments[0];
-        if ( !'isInside' in this.listener ) {
-            alert( "Interactive: listener must implement\n" +
-				   "public boolean isInside (float mx, float my)" );
+        if ( !( 'isInside' in this.listener ) ) {
+			if ( ('x' in this.listener) && ('y' in this.listener) && 
+			     ('width' in this.listener) && ('height' in this.listener) ) {
+				this.listener.isInside = function ( mx, my ) {
+					return Interactive.insideRect( this.x, this.y, 
+												   this.width, this.height, 
+												   mx, my );
+				}
+			} else {
+	        	alert( "Interactive: listener must implement\n" +
+		   			   "public boolean isInside (float mx, float my)" );
+			}
         }
 
         this.pressed = this.dragged = this.hover = false, this.activated = true;
@@ -198,8 +207,9 @@ var Interactive = (function(){
 
         this.mousePressed = function ( mx, my ) {
             if ( !this.activated ) return;
-
-            this.pressed = this.listener.isInside( mx, my );
+			
+			this.pressed = this.listener.isInside( mx, my );
+				
             if ( this.pressed ) {
                 this.clickedPositionX = this.listener.x;
                 this.clickedPositionY = this.listener.y;
