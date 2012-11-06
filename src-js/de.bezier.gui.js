@@ -167,7 +167,8 @@ var Interactive = (function(){
     }
 
     Interactive.add = function ( listener ) {
-        interactiveInstance.add( new ActiveElement( listener ) );
+        if ( interactiveInstance )
+            interactiveInstance.add( new ActiveElement( listener ) );
     }
 
     Interactive.setActive = function ( listener, state ) {
@@ -182,10 +183,68 @@ var Interactive = (function(){
 		}
     }
 
-	Interactive.insideRect = function ( x, y, width, height, mx, my )
-	{
+	Interactive.insideRect = function ( x, y, width, height, mx, my ) {
 		return mx >= x && mx <= x+width && my >= y && my <= y+height;
 	}
+
+    Interactive.on = function () {
+        if ( interactiveInstance ) {
+            var ia = interactiveInstance;
+            if ( !ia.eventBindings ) {
+                ia.eventBindings = [];
+            }
+            var source, event, target, method;
+            if ( arguments.length < 3 ) {
+                throw( "Interactive.on() ... not enough arguments" );
+            } else if (arguments.length == 3 ) {
+                source = null;
+                event = arguments[0];
+                target = arguments[1];
+                method = arguments[2];
+            } else if ( arguments.length == 4) {
+                source = arguments[0];
+                event = arguments[1];
+                target = arguments[2];
+                method = arguments[3];
+            }
+            var binding = ia.eventBindings[event];
+            if ( !binding ) {
+                binding = [];
+                ia.eventBindings[event] = binding;
+            }
+            binding.push({callback: function(){ target[method].apply(target, arguments) },source: source});
+        }
+    }
+
+    Interactive.send = function () {
+        if ( interactiveInstance ) {
+            var ia = interactiveInstance;
+            var source, event, args = [];
+            if ( arguments.length < 2 ) {
+                throw( "Interactive.send() ... not enough arguments" );
+            } else if ( typeof arguments[0] === 'object' ) {
+                source = arguments[0];
+                event = arguments[1];
+                for ( var i = 2, k = arguments.length; i < k; i++ ) {
+                    args.push( arguments[i] );
+                }
+            } else {
+                source = null;
+                event = arguments[0];
+                for ( var i = 1, k = arguments.length; i < k; i++ ) {
+                    args.push( arguments[i] );
+                }
+            }
+            var binding = ia.eventBindings[event];
+            if ( binding ) {
+                for ( var i = 0, k = binding.length; i < k; i++ ) {
+                    if ( binding[i] && binding[i].source === source ) {
+                        binding[i].callback.apply(null, args);
+                    }
+                }
+            }
+        }
+    }
 
     // -----------------------------------------
     //   class ActiveElement

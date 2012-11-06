@@ -18,7 +18,7 @@ void setup ()
     
     // create a slider
     
-    slider = new Slider(0, 0, width, 20);
+    slider = new Slider( 2, 2, width-4, 16 );
 }
 
 void draw ()
@@ -38,7 +38,12 @@ public class Slider
     
     Slider ( float xx, float yy, float ww, float hh ) 
     {
-        x = xx; y = yy; width = ww; height = hh;
+        x = xx; 
+        y = yy; 
+        width = ww; 
+        height = hh;
+        
+        valueX = x;
     
         // register it
         Interactive.add( this );
@@ -49,10 +54,10 @@ public class Slider
     {
         valueX = mx - height/2;
         
-        if ( valueX < 0 ) valueX = 0;
-        if ( valueX > width-height ) valueX = width-height;
+        if ( valueX < x ) valueX = x;
+        if ( valueX > x+width-height ) valueX = x+width-height;
         
-        value = map( valueX, 0, width-height, 0, 1 );
+        value = map( valueX, x, x+width-height, 0, 1 );
     }
 
     void draw () 

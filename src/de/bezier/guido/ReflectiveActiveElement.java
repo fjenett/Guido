@@ -58,13 +58,24 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 		Method[] meths = getClass().getDeclaredMethods();
 		for ( Method m : meths ) {
 			try {
-				// m.getName()+m.getParameterTypes().length
+				
+				// System.out.println( m.getName()+m.getParameterTypes().length );
+
 				Method mo = listener.getClass().getDeclaredMethod( m.getName(), m.getParameterTypes() );
 				if ( mo != null )
 				{
 					getClass().getDeclaredField( m.getName()+m.getParameterTypes().length ).set( this, mo );
 					if (debug) System.out.println( mo.getName() );
 				}
+				// else
+				// {
+				// 	mo = listener.getClass().getMethod( m.getName(), m.getParameterTypes() );
+				// 	if ( mo != null )
+				// 	{
+				// 		getClass().getDeclaredField( m.getName()+m.getParameterTypes().length ).set( this, mo );
+				// 		if (debug) System.out.println( mo.getName() );
+				// 	}
+				// }
 			} catch ( Exception e ) {
 				if (debug) e.printStackTrace();
 			}

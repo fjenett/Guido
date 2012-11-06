@@ -24,6 +24,9 @@ implements MouseWheelListener
 	ArrayList<AbstractActiveElement> interActiveElements;
 	static Interactive manager;
 	PApplet papplet;
+
+	static HashMap<String, ArrayList<EventBinding>> eventBindings;
+	static Method emitMethod;
 	
 	private Interactive ( PApplet papplet )
 	{
@@ -64,7 +67,11 @@ implements MouseWheelListener
 		}
 		return manager;
 	}
-	
+
+	// ------------------------------------------
+	//	static methods, states, utils
+	// ------------------------------------------
+
 	/**
 	 *	Activate or deactivate and interface element.
 	 *
@@ -138,6 +145,126 @@ implements MouseWheelListener
 		// this adds itself to Interactive in constructor
 		new ReflectiveActiveElement( element );
 	}
+
+	/**
+	 *	Trying to set a field in an object to a given value.
+	 */
+	public static void set ( Object obj, String fieldName, Object value ) 
+	{
+		if ( obj == null || fieldName == null || value == null )
+		{
+			System.err.println( "Interactive.set() ... a value is null!" );
+		}
+		Field field = Interactive.getField( obj, fieldName, value );
+		if ( field != null )
+		{
+			try {
+	            field.set( obj, value );
+	        } catch ( Exception e ) {
+	            e.printStackTrace();
+	        }
+		}
+	}
+
+	/**
+	 *	Get a field from an object by looking at the fields name and value signature.
+	 */
+	public static Field getField ( Object obj, String fieldName, Object value )
+	{
+		Class valueClass = value.getClass();
+
+		Field[] fields = obj.getClass().getDeclaredFields();
+		for ( Field f : fields ) 
+		{	
+			if ( f.getType().isAssignableFrom( valueClass ) && f.getName().equals( fieldName ) )
+			{
+				return f;
+			}
+		}
+
+		// what to do here?
+
+		System.err.println( "Interactive.set() ... unable to find a field with that name in given target" );
+		return null;
+	}
+
+	public static void on ( String eventName, Object targetObject, String targetMethodName )
+	{
+		Interactive.on( null, eventName, targetObject, targetMethodName );
+	}
+
+	public static void on ( Object emitterObject, String eventName, Object targetObject, String targetMethodName )
+	{
+		Method targetMethod = null;
+		try {
+			Method[] meths = targetObject.getClass().getDeclaredMethods();
+			for ( Method m : meths ) 
+			{
+				if ( m.getName().equals( targetMethodName ) )
+				{
+					targetMethod = m;
+				}
+			}
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
+		if ( targetMethod != null )
+		{
+			String bindingId = EventBinding.getIdFor( emitterObject, eventName );
+			EventBinding binding = new EventBinding( eventName, targetObject, targetMethod );
+			if ( eventBindings == null ) eventBindings = new HashMap();
+			ArrayList<EventBinding> list = eventBindings.get( bindingId );
+			if ( list == null )
+			{
+				list = new ArrayList();
+				eventBindings.put( bindingId, list );
+			}
+			list.add( binding );
+		}
+		else
+		{
+			System.err.println( "Sorry, that method named " + targetMethodName + " could not be found ... " );
+		}
+	}
+
+	public static void send ( String eventName, Object...eventValues )
+	{
+		if ( emitMethod == null ) {
+			try {
+				emitMethod = Interactive.class.getDeclaredMethod( "send", new Class[]{
+					Object.class, String.class, Object[].class
+				});
+			} catch ( Exception e ) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			emitMethod.invoke( null, new Object[]{ null, eventName, eventValues } );
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void send ( Object emitterObject, String eventName, Object...eventValues )
+	{
+		if ( eventBindings == null )
+		{
+			System.err.println( "No bindings exist at the moment" );
+			return;
+		}
+		String bindingId = EventBinding.getIdFor( emitterObject, eventName );
+		ArrayList<EventBinding> list = eventBindings.get( bindingId );
+		if ( list != null )
+		{
+			for ( EventBinding binding : list )
+			{
+				if ( binding != null )
+				{
+					binding.send( eventValues );
+				}
+			}
+		}
+	}
 	
 	// ------------------------------------------
 	//	instance methods
@@ -195,6 +322,8 @@ implements MouseWheelListener
 	 */
 	public void draw ()
 	{
+		if ( interActiveElements == null ) return;
+		
 		for ( AbstractActiveElement interActiveElement : interActiveElements )
 		{
 			if ( !interActiveElement.isActive() ) continue;
