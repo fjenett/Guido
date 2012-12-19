@@ -21,6 +21,8 @@ import java.lang.reflect.*;
 public class Interactive 
 implements MouseWheelListener
 {
+	private boolean enabled = true;
+
 	ArrayList<AbstractActiveElement> interActiveElements;
 	static Interactive manager;
 	PApplet papplet;
@@ -51,6 +53,7 @@ implements MouseWheelListener
 	{
 		if ( manager == null )
 			manager = new Interactive( papplet );
+
 		return manager;
 	}
 	
@@ -266,9 +269,56 @@ implements MouseWheelListener
 		}
 	}
 	
+	public static boolean isActive ()
+	{
+		if ( manager != null ) {
+			return manager.isEnabled();
+		}
+		return false;
+	}
+
+	public static void toggle ()
+	{
+		if ( manager != null ) {
+			manager.setEnabled( manager.isEnabled() ? false : true );
+		}
+	}
+
+	public static void deactivate ()
+	{
+		if ( manager != null ) {
+			manager.setEnabled( false );
+		}
+	}
+
+	public static void activate ()
+	{
+		if ( manager != null ) {
+			manager.setEnabled( true );
+		}
+	}
+
+	public static void setActive ( boolean tf )
+	{
+		if ( manager != null ) {
+			manager.setEnabled( tf );
+		}
+	}
+	
 	// ------------------------------------------
 	//	instance methods
 	// ------------------------------------------
+
+
+	public boolean isEnabled ()
+	{
+		return enabled;
+	}
+
+	public void setEnabled ( boolean tf )
+	{
+		enabled = tf;
+	}
 	
 	/**
 	 *	Callback for Component.addMouseWheelListener()
@@ -278,6 +328,8 @@ implements MouseWheelListener
 	 */
 	public void mouseWheelMoved ( MouseWheelEvent e ) 
 	{
+		if ( !enabled ) return;
+
 		int step = e.getWheelRotation();
 		for ( AbstractActiveElement interActiveElement : interActiveElements )
 		{
@@ -322,6 +374,8 @@ implements MouseWheelListener
 	 */
 	public void draw ()
 	{
+		if ( !enabled ) return;
+		
 		if ( interActiveElements == null ) return;
 		
 		for ( AbstractActiveElement interActiveElement : interActiveElements )
@@ -338,6 +392,8 @@ implements MouseWheelListener
 	 */
 	public void mouseEvent ( MouseEvent evt )
 	{
+		if ( !enabled ) return;
+		
 		if ( interActiveElements == null ) return;
 		
 		switch ( evt.getID() )

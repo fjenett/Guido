@@ -1,6 +1,5 @@
 /**
- *    
- *    
+ *    This example shows how to use the event sending / callback mechanism.
  */
 
  import de.bezier.guido.*;
@@ -18,6 +17,7 @@
      
      slider = new Slider ( 10, height-35, width-20, 10 );
      
+     // set radiusChanged method as listener to valueChanged event from slider
      Interactive.on( slider, "valueChanged", this, "radiusChanged" );
      
      mSlider = new MultiSlider( 10, height-20, width-20, 10 );
