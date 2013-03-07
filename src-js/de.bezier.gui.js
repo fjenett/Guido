@@ -2,6 +2,7 @@
 //	Taking a whole hearted stab at including a js lib alongside Java.
 //
 //	fjenett - 2012-04
+//  fjenett 20121219
 //
 
 if ( !Interactive ) {
@@ -166,9 +167,20 @@ var Interactive = (function(){
         });
     }
 
-    Interactive.add = function ( listener ) {
-        if ( interactiveInstance )
-            interactiveInstance.add( new ActiveElement( listener ) );
+    Interactive.add = function ( oneOrMoreListeners ) {
+        var ae = null;
+        if ( interactiveInstance ) {
+            if ( Object.prototype.toString.call( oneOrMoreListeners ) === '[object Array]' ) {
+                for ( var i = 0, k = oneOrMoreListeners.length; i < k; i++ ) {
+                    interactiveInstance.add( new ActiveElement( oneOrMoreListeners[i] ) );
+                }
+                return null;
+            } else {
+                ae = new ActiveElement( oneOrMoreListeners );
+                interactiveInstance.add( ae );
+            }
+        }
+        return ae;
     }
 
     Interactive.setActive = function ( listener, state ) {
@@ -270,11 +282,16 @@ var Interactive = (function(){
         }
 
         this.pressed = this.dragged = this.hover = false, this.activated = true;
-        this.clickedMouseX, this.clickedMouseY;
-        this.clickedPositionX, this.clickedPositionY;
-        this.draggedDistX, this.draggedDistY;
+        this.clickedMouseX = 0, this.clickedMouseY = 0;
+        this.clickedPositionX = 0, this.clickedPositionY = 0;
+        this.draggedDistX = 0, this.draggedDistY = 0;
         this.lastPressed = 0;
 		this.activated = true;
+        this.debug = false;
+
+        this.setDebug = function ( tf ) {
+            this.debug = tf ? true : false;
+        }
 
         this.mousePressed = function ( mx, my ) {
             if ( !(this.activated) ) return;

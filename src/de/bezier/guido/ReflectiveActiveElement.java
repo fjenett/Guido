@@ -4,8 +4,6 @@ import java.lang.reflect.*;
 
 public class ReflectiveActiveElement extends AbstractActiveElement
 {
-	private boolean debug = false;
-	
 	Object listener;
 	Method setter, getter;
 	Method mouseEntered0, mouseEntered2,
@@ -33,7 +31,11 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 		init( l );
 	}
 	
-	private void init ( Object l ) 
+	/**
+	 *	TODO:
+	 *	- check and warn about unreachable functions, wrong parameters, ...
+	 */
+	private void init ( Object l )
 	{
 		try {
 			Class sClass = Class.forName( "DeBezierGuiGuiObject" );
@@ -458,7 +460,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	{
 		updateXY();
 		try {
-			if (isInside2 != null) 
+			if (isInside2 != null)
 				return ((Boolean)(isInside2.invoke( listener, mx, my ))).booleanValue();
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 		return isInsideFromFields( mx, my );

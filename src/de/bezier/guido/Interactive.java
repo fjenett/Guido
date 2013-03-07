@@ -24,6 +24,8 @@ implements MouseWheelListener
 	private boolean enabled = true;
 
 	ArrayList<AbstractActiveElement> interActiveElements;
+	private ArrayList<AbstractActiveElement> interActiveElementsList;
+
 	static Interactive manager;
 	PApplet papplet;
 
@@ -34,14 +36,14 @@ implements MouseWheelListener
 	{
 		this.papplet = papplet;
 		
-		papplet.registerMouseEvent( this );
+		papplet.registerMethod( "mouseEvent" ,this );
 
 		if ( papplet.frame != null )
 		{
 			papplet.frame.addMouseWheelListener(this);
 		}
 		
-		papplet.registerDraw( this );
+		papplet.registerMethod( "draw", this );
 	}
 	
 	/**
@@ -130,23 +132,33 @@ implements MouseWheelListener
 	 *	}
 	 *  </code></p>
 	 *
-	 *	@param element the element to manage
+	 *	@param element the element to be managed
+	 *	@return AbstractActiveElement the internal listener
 	 */
-	public static void add ( Object element )
+	public static AbstractActiveElement add ( Object element )
 	{
 		if ( manager == null) {
 			System.err.println( "You need to call Interactive.make() first." );
-			return;
+			return null;
 		}
 
 		Class klass = element.getClass();
 		while ( klass != null ) {
-			if ( klass == AbstractActiveElement.class ) return;
+			if ( klass == AbstractActiveElement.class ) return null;
 			klass = klass.getSuperclass();
 		}
 
 		// this adds itself to Interactive in constructor
-		new ReflectiveActiveElement( element );
+		ReflectiveActiveElement rae = new ReflectiveActiveElement( element );
+		return rae;
+	}
+
+	public static void add ( Object[] elements )
+	{
+		for ( Object e : elements ) 
+		{
+			Interactive.add( e );
+		}
 	}
 
 	/**
@@ -194,6 +206,13 @@ implements MouseWheelListener
 	public static void on ( String eventName, Object targetObject, String targetMethodName )
 	{
 		Interactive.on( null, eventName, targetObject, targetMethodName );
+	}
+
+	public static void on ( Object[] emitterObjects, String eventName, Object targetObject, String targetMethodName )
+	{
+		for ( Object e : emitterObjects ) {
+			Interactive.on( e, eventName, targetObject, targetMethodName );
+		}
 	}
 
 	public static void on ( Object emitterObject, String eventName, Object targetObject, String targetMethodName )
@@ -329,9 +348,12 @@ implements MouseWheelListener
 	public void mouseWheelMoved ( MouseWheelEvent e ) 
 	{
 		if ( !enabled ) return;
+		if ( interActiveElements == null ) return;
+
+		updateListenerList();
 
 		int step = e.getWheelRotation();
-		for ( AbstractActiveElement interActiveElement : interActiveElements )
+		for ( AbstractActiveElement interActiveElement : interActiveElementsList )
 		{
 			if ( !interActiveElement.isActive() ) continue;
 
@@ -352,6 +374,25 @@ implements MouseWheelListener
 				interActiveElement.mouseExited( mx, my );
 			}
 		}
+
+		clearListenerList();
+	}
+
+	private void updateListenerList ()
+	{
+		if ( interActiveElements == null ) {
+			System.err.println( "Trying to build event-list but source list is empty" );
+			return;
+		} 
+		if ( interActiveElementsList == null ) {
+			interActiveElementsList = new ArrayList<AbstractActiveElement>( interActiveElements.size() );
+			interActiveElementsList.addAll( interActiveElements );
+		}
+	}
+
+	private void clearListenerList ()
+	{
+		interActiveElementsList = null;
 	}
 	
 	/**
@@ -368,7 +409,7 @@ implements MouseWheelListener
 	}
 	
 	/**
-	 *	Callback for PApplet.registerDraw()
+	 *	Callback for PApplet.registerMethod("draw")
 	 *
 	 *	@see <a href="http://processing.googlecode.com/svn/trunk/processing/build/javadoc/core/processing/core/PApplet.html#registerDraw(java.lang.Object)">PApplet.registerDraw( Object obj )</a>
 	 */
@@ -377,64 +418,71 @@ implements MouseWheelListener
 		if ( !enabled ) return;
 		
 		if ( interActiveElements == null ) return;
+
+		updateListenerList();
 		
-		for ( AbstractActiveElement interActiveElement : interActiveElements )
+		for ( AbstractActiveElement interActiveElement : interActiveElementsList )
 		{
 			if ( !interActiveElement.isActive() ) continue;
 			interActiveElement.draw();
 		}
+
+		clearListenerList();
 	}
 	
 	/**
-	 *	Callback for PApplet.registerMouseEvent()
+	 *	Callback for PApplet.registerMethod("mouseEvent")
 	 *
 	 *	@see <a href="http://processing.googlecode.com/svn/trunk/processing/build/javadoc/core/processing/core/PApplet.html#registerMouseEvent(java.lang.Object)">PApplet.registerMouseEvent(Object obj)</a>
 	 */
-	public void mouseEvent ( MouseEvent evt )
+	public void mouseEvent ( processing.event.MouseEvent evt )
 	{
 		if ( !enabled ) return;
 		
 		if ( interActiveElements == null ) return;
+
+		updateListenerList();
 		
-		switch ( evt.getID() )
+		switch ( evt.getAction() )
 		{
-			case MouseEvent.MOUSE_ENTERED:
+			case processing.event.MouseEvent.ENTER:
 				mouseEntered( evt );
 				break;
-			case MouseEvent.MOUSE_MOVED:
+			case processing.event.MouseEvent.MOVE:
 				mouseMoved( evt );
 				break;
-			case MouseEvent.MOUSE_PRESSED:
+			case processing.event.MouseEvent.PRESS:
 				mousePressed( evt );
 				break;
-			case MouseEvent.MOUSE_DRAGGED:
+			case processing.event.MouseEvent.DRAG:
 				mouseDragged( evt );
 				break;
-			case MouseEvent.MOUSE_RELEASED:
+			case processing.event.MouseEvent.RELEASE:
 				mouseReleased( evt );
 				break;
-			case MouseEvent.MOUSE_CLICKED:
+			case processing.event.MouseEvent.CLICK:
 				//mousePressed( evt );
 				break;
-			case MouseEvent.MOUSE_EXITED:
+			case processing.event.MouseEvent.EXIT:
 				mouseExited( evt );
 				break;
-				
 		}
+
+		clearListenerList();
 	}
 	
-	private void mouseEntered ( MouseEvent evt ) {
+	private void mouseEntered ( processing.event.MouseEvent evt ) {
 	}
 	
-	private void mouseMoved ( MouseEvent evt )
+	private void mouseMoved ( processing.event.MouseEvent evt )
 	{
 		int mx = evt.getX();
 		int my = evt.getY();
 
-		for ( AbstractActiveElement interActiveElement : interActiveElements )
+		for ( AbstractActiveElement interActiveElement : interActiveElementsList )
 		{
 			if ( !interActiveElement.isActive() ) continue;
-			
+
 			boolean wasHover = interActiveElement.hover;
 			interActiveElement.hover = interActiveElement.isInside( mx, my );
 			if ( interActiveElement.hover && !wasHover )
@@ -455,12 +503,12 @@ implements MouseWheelListener
 		}
 	}
 	
-	private void mousePressed ( MouseEvent evt )
+	private void mousePressed ( processing.event.MouseEvent evt )
 	{
 		int mx = evt.getX();
 		int my = evt.getY();
 		
-		for ( AbstractActiveElement interActiveElement : interActiveElements )
+		for ( AbstractActiveElement interActiveElement : interActiveElementsList )
 		{
 			if ( !interActiveElement.isActive() ) continue;
 
@@ -469,12 +517,12 @@ implements MouseWheelListener
 		}
 	}
 	
-	private void mouseDragged ( MouseEvent evt )
+	private void mouseDragged ( processing.event.MouseEvent evt )
 	{
 		int mx = evt.getX();
 		int my = evt.getY();
 		
-		for ( AbstractActiveElement interActiveElement : interActiveElements )
+		for ( AbstractActiveElement interActiveElement : interActiveElementsList )
 		{
 			if ( !interActiveElement.isActive() ) continue;
 
@@ -483,12 +531,12 @@ implements MouseWheelListener
 		}
 	}
 	
-	private void mouseReleased ( MouseEvent evt )
+	private void mouseReleased ( processing.event.MouseEvent evt )
 	{
 		int mx = evt.getX();
 		int my = evt.getY();
 		
-		for ( AbstractActiveElement interActiveElement : interActiveElements )
+		for ( AbstractActiveElement interActiveElement : interActiveElementsList )
 		{
 			if ( !interActiveElement.isActive() ) continue;
 
@@ -499,6 +547,6 @@ implements MouseWheelListener
 		}
 	}
 	
-	private void mouseExited ( MouseEvent evt ) {
+	private void mouseExited ( processing.event.MouseEvent evt ) {
 	}
 }

@@ -7,7 +7,9 @@ public abstract class AbstractActiveElement extends Basic2DElement
 	protected float draggedDistX, draggedDistY;
 	
 	public boolean pressed, dragged, hover, activated = true;
-	
+
+	protected boolean debug = false;
+
 	long lastPressed = 0;
 	
 	public AbstractActiveElement ()
@@ -20,6 +22,11 @@ public abstract class AbstractActiveElement extends Basic2DElement
 	{
 		super(x,y,width,height);
 		Interactive.get().addElement( this );
+	}
+
+	public void setDebug ( boolean tf )
+	{
+		debug = tf;
 	}
 
 	public void setActive ( boolean yesNo ) 

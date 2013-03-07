@@ -24,13 +24,13 @@
 	
 	<!--property name="processing.classes" location="/Applications/Processing.app/Contents/Resources/Java/"/-->
 	<property name="processing.classes" 
-			  location="/Users/fjenett/Repos/processing/processing/build/macosx/work/Processing.app/Contents/Resources/Java/"/>
+			  location="/Users/fjenett/Repos/processing/build/macosx/work/Processing.app/Contents/Resources/Java/"/>
 	<property name="processing.libs" 
 			  location="/Users/fjenett/Documents/Processing/libraries"/>	
 
 	<path id="library-classpath">
 		<fileset dir="${processing.classes}" >
-			<include name="core.jar"/>
+			<include name="core/library/core.jar"/>
 		</fileset>
 	</path>
 	
