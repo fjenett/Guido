@@ -38,12 +38,37 @@ implements MouseWheelListener
 		
 		papplet.registerMethod( "mouseEvent" ,this );
 
-		if ( papplet.frame != null )
-		{
-			papplet.frame.addMouseWheelListener(this);
-		}
-		
+		addMouseWheelListener();
+
 		papplet.registerMethod( "draw", this );
+	}
+
+	/**
+	 *	Add java.awt.event.MouseWheel listener to PApplet
+	 */
+	private void addMouseWheelListener ()
+	{
+		new Thread()
+		{
+			int runs = 0;
+
+			public void run ()
+			{
+				runs++;
+				if ( manager.papplet.frame != null )
+				{
+					manager.papplet.frame.addMouseWheelListener( manager );
+					return;
+				}
+
+				try {
+					Thread.sleep( 1000 );
+					if (runs < 10 ) run();
+				} catch ( Exception e ) {
+					System.err.println( e );
+				}
+			}
+		}.start();
 	}
 	
 	/**
@@ -345,19 +370,26 @@ implements MouseWheelListener
 	 *	@param e the mouse wheel (scroll) event
 	 *  @see java.awt.Component#addMouseWheelListener(java.awt.event.MouseWheelListener)
 	 */
-	public void mouseWheelMoved ( MouseWheelEvent e ) 
+	public void mouseWheelMoved ( java.awt.event.MouseWheelEvent e ) 
+	{
+		if ( !enabled ) return;
+		if ( interActiveElements == null ) return;
+
+		mouseWheelMovedImpl( e.getWheelRotation() );
+	}
+
+	private void mouseWheelMovedImpl ( float amount )
 	{
 		if ( !enabled ) return;
 		if ( interActiveElements == null ) return;
 
 		updateListenerList();
 
-		int step = e.getWheelRotation();
 		for ( AbstractActiveElement interActiveElement : interActiveElementsList )
 		{
 			if ( !interActiveElement.isActive() ) continue;
 
-			interActiveElement.mouseScrolled( step );
+			interActiveElement.mouseScrolled( amount );
 			
 			float mx = papplet.mouseX;
 			float my = papplet.mouseY;
@@ -465,6 +497,9 @@ implements MouseWheelListener
 				break;
 			case processing.event.MouseEvent.EXIT:
 				mouseExited( evt );
+				break;
+			case processing.event.MouseEvent.WHEEL:
+				mouseWheelMovedImpl( evt.getAmount() );
 				break;
 		}
 
