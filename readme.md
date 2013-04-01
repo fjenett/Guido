@@ -6,11 +6,11 @@ Why another GUI lib?
 There are two reasons i started this. One is that i find myself re-writing my own GUI management again and again since most other GUI libs are not easy to customize in terms of style and behaviour. The second reason is that i needed one that is cross mode (Java / JavaScript) compatible (see below).
 
 What does cross mode mean and why "the Processings"?
-The future 2.0 Processing will have ["modes"](http://wiki.processing.org/w/JavaScript) which are additional language flavours to write and use Processing in. One is the then included JavaScript mode which is based upon [Processing.js](https://github.com/processing-js/processing-js). Guido is an attempt at writing a GUI library that supports both Java and JavaScript, so any sketch using it should run on both modes.
+The future 2.0 Processing will have ["modes"](http://wiki.processing.org/w/JavaScript) which are additional language flavours to write and use Processing in. One is the JavaScript mode which is based upon [Processing.js](https://github.com/processing-js/processing-js). Guido is an attempt at writing a GUI library that supports both Java and JavaScript, so any sketch using it should run on both modes.
 	
 ***Installing***
 
-As of Processing 2.0 you should use the "Library Manager" built into the PDE. From the menu:
+As of Processing 2.0 you should use the "Library Manager" built into the Processing editor (PDE). From the menu:
 Sketch > Import Library ... > Add Library ...
 
 Select "GUI" from the filter menu at top, or type guido into search.
@@ -38,7 +38,7 @@ Guido is mainly an event manager that collects and distributes events to interfa
     
 	    Interactive.make( this ); // start GUIDO
     
-	    MyButton mb = new MyButton( 20, 20, 50, 50 ); // create an instance of you element
+	    MyButton mb = new MyButton( 20, 20, 50, 50 ); // create an instance of your element
 	}
 
 	void draw ()
@@ -58,7 +58,7 @@ Guido is mainly an event manager that collects and distributes events to interfa
 	    {
 	        x = xx; y = yy; width = ww; height = hh;
         
-	        Interactive.add( this ); // add this to GUIDO
+	        Interactive.add( this ); // add this to GUIDO manager, important!
 	    }
     
 	    void mousePressed ()
@@ -78,3 +78,8 @@ Guido is mainly an event manager that collects and distributes events to interfa
 	}
 
 For a full overview of all available callbacks and their different forms open the ReflectiveActiveElement reference included in the download.
+
+***Contribute***
+
+If you write super cool interface classes maybe consider sharing them with me so i can include them into Guido as examples ...
+
