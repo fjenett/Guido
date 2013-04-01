@@ -1,4 +1,4 @@
-<project name="Guido" default="release" basedir="./">
+<project name="Guido" default="install" basedir="./">
 
 	<description>
 	
@@ -9,7 +9,7 @@
 	</description>
 	
 	<property name="libraryName" 	value="Guido" />
-	<property name="versionNumber"  value="0.0.3" />
+	<property name="versionNumber"  value="0.0.2" />
 	<property name="author" 		value="Florian Jenett"/>
 	<property name="copyright" 		value="(c) 2012"/>
 	
@@ -138,7 +138,7 @@
 	<!-- + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 		RELEASE
 	 + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
-	<target name="release" depends="documentation">
+	<target name="release" depends="install">
 		
 	  	<zip destfile="releases/${libraryName}-${versionNumber}.zip"
 	  	     basedir="${dist}"

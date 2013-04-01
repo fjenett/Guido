@@ -1,0 +1,8 @@
+name = Guido
+authorList = [Florian Jenett](http://www.bezier.de/)
+url = https://github.com/fjenett/Guido
+category = GUI
+sentence = A simple cross mode GUI library
+paragraph =  Guido is a small GUI library that is compatible with both Java (standard) and JavaScript modes.
+version = 126
+prettyVersion = 0.0.2
