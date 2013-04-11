@@ -140,10 +140,11 @@
 	 + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
 	<target name="release" depends="install">
 		
-	  	<zip destfile="releases/${libraryName}-${versionNumber}.zip"
-	  	     basedir="${dist}"
-	  	     excludes="**/_DS.Store"
-		/>
+	  	<zip destfile="releases/${libraryName}-${versionNumber}.zip">
+	  		<zipfileset dir="">
+				<include name="${dist}/**/**" />
+			</zipfileset>
+	  	</zip>
 		
 		<copy tofile="releases/${libraryName}.zip">
 			<fileset file="releases/${libraryName}-${versionNumber}.zip" />

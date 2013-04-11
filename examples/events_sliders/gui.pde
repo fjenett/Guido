@@ -130,7 +130,7 @@ public class MultiSlider
             }
         }
         
-        if ( activeHandle ) activeHandle.x = vx;
+        if ( activeHandle != null ) activeHandle.x = vx;
     }
     
     void draw ()
