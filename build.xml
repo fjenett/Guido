@@ -9,7 +9,7 @@
 	</description>
 	
 	<property name="libraryName" 	value="Guido" />
-	<property name="versionNumber"  value="0.0.3" />
+	<property name="versionNumber"  value="0.0.4" />
 	<property name="author" 		value="Florian Jenett"/>
 	<property name="copyright" 		value="(c) 2012-2013"/>
 	
