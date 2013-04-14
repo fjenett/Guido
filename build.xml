@@ -1,4 +1,4 @@
-<project name="Guido" default="install" basedir="./">
+<project name="Guido" default="release" basedir="./">
 
 	<description>
 	
@@ -80,7 +80,28 @@
 		
 		<mkdir dir="${dist}/examples" />
 		<copy todir="${dist}/examples">
-			<fileset dir="examples" />
+			<fileset dir="examples">
+				<exclude name="**/web-export" />
+				<exclude name="**/web-export/**" />
+				<exclude name="**/.DS_Store" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${dist}/source" />
+		<copy todir="${dist}/source/java">
+			<fileset dir="${src}">
+				<include name="**/*.java" />
+				<exclude name="**/.DS_Store" />
+			</fileset>
+		</copy>
+		<copy todir="${dist}/source/js">
+			<fileset dir="${src}-js">
+				<include name="**/*.js" />
+				<exclude name="**/.DS_Store" />
+			</fileset>
+		</copy>
+		<copy tofile="${dist}/source/readme.txt">
+			<fileset file="resources/source-note.txt" />
 		</copy>
 		
 		<copy todir="${dist}">
