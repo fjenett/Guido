@@ -219,12 +219,23 @@ var Interactive = (function(){
                 target = arguments[2];
                 method = arguments[3];
             }
+            if ( !target ) {
+                throw( "Interactive.on() ... the target is null" );
+            }
+            if ( !( method in target ) || typeof target[method] !== 'function' ) {
+                throw( "Interactive.on() ... that method does not exist" );
+            }
             var binding = ia.eventBindings[event];
             if ( !binding ) {
                 binding = [];
                 ia.eventBindings[event] = binding;
             }
-            binding.push({callback: function(){ target[method].apply(target, arguments) },source: source});
+            binding.push({
+                callback: function(){ 
+                    target[method].apply(target, arguments) 
+                },
+                source: source
+            });
         }
     }
 
