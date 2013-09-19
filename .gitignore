@@ -1,14 +1,10 @@
-
 bin
 dist
 legacy/*
 legacy
 web-export
-
 .DS_Store
-
 releases
-Guido
-
+Guido/*
 sketch.properties
 build.number
