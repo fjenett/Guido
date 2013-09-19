@@ -230,17 +230,26 @@ implements MouseWheelListener
 
 	public static void on ( String eventName, Object targetObject, String targetMethodName )
 	{
-		Interactive.on( null, eventName, targetObject, targetMethodName );
+		Interactive.onImpl( null, eventName, targetObject, targetMethodName );
 	}
 
 	public static void on ( Object[] emitterObjects, String eventName, Object targetObject, String targetMethodName )
 	{
-		for ( Object e : emitterObjects ) {
-			Interactive.on( e, eventName, targetObject, targetMethodName );
+		if ( emitterObjects != null ) {
+			for ( Object e : emitterObjects ) {
+				Interactive.onImpl( e, eventName, targetObject, targetMethodName );
+			}
+		} else {
+			System.err.println( "Err: no emitter events available" );
 		}
 	}
 
 	public static void on ( Object emitterObject, String eventName, Object targetObject, String targetMethodName )
+	{
+		Interactive.onImpl( emitterObject, eventName, targetObject, targetMethodName );
+	}
+
+	private static void onImpl ( Object emitterObject, String eventName, Object targetObject, String targetMethodName )
 	{
 		Method targetMethod = null;
 		try {
@@ -310,6 +319,8 @@ implements MouseWheelListener
 					binding.send( eventValues );
 				}
 			}
+		} else {
+			System.out.println( "No bindings found for: " + bindingId );
 		}
 	}
 	

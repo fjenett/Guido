@@ -243,7 +243,7 @@ var Interactive = (function(){
         if ( interactiveInstance ) {
             var ia = interactiveInstance;
             var source, event, args = [];
-            if ( arguments.length < 2 ) {
+            if ( arguments.length < 1 ) {
                 throw( "Interactive.send() ... not enough arguments" );
             } else if ( typeof arguments[0] === 'object' ) {
                 source = arguments[0];
