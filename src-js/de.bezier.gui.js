@@ -7,7 +7,7 @@
 
 if ( !Interactive ) {
 var Interactive = (function(){
-	
+
     // -----------------------------------------
     //   private variables and functions
     // -----------------------------------------
@@ -85,9 +85,9 @@ var Interactive = (function(){
 
         this.target = opts.target;
 		setStyleValues( this.target );
-		
+
         this.listeners = [];
-		
+
 		if ( opts.papplet && 'draw' in opts.papplet ) {
 			var drawStored = opts.papplet.draw;
 			opts.papplet.draw = (function(ia,pa,ds){
@@ -100,7 +100,7 @@ var Interactive = (function(){
 		}
 
         var events = [
-            "mousemove", "mousedown", "mouseup", "click", "dblclick", 
+            "mousemove", "mousedown", "mouseup", "click", "dblclick",
             "mouseover", "mouseout", "mouseenter", "mouseleave", "mousewheel",
 			"DOMMouseScroll"
         ];
@@ -117,18 +117,18 @@ var Interactive = (function(){
                 addEventListenerImpl( target, event, function( evt ){
 //                    console.log( event );
 //                    console.log( evt );
-					
+
 					var offset = calculateOffset( target, evt );
-					
+
                     for ( var l in manager.listeners ) {
 						if ( !( manager.listeners[l].isActive() ) ) continue;
                         if ( meth in manager.listeners[l] ) {
 							if ( meth == 'mouseScrolled' )
 								manager.listeners[l][meth]( evt.detail ? evt.detail * -1 : evt.wheelDelta / 40,
-									 						evt.pageX - offset.X, 
+									 						evt.pageX - offset.X,
 															evt.pageY - offset.Y );
 							else
-								manager.listeners[l][meth]( evt.pageX - offset.X, 
+								manager.listeners[l][meth]( evt.pageX - offset.X,
 															evt.pageY - offset.Y );
 						}
                     }
@@ -140,10 +140,17 @@ var Interactive = (function(){
             this.listeners.push( listener );
         }
 
+        this.remove = function( listener ) {
+            for ( var i = 0, k = this.listeners.length; i < k; i++ ) {
+                if ( this.listeners[i] == listener )
+                    this.listeners.splice( i, 1 );
+            }
+        }
+
 		this.preDraw = function ( papplet ) {
 			//console.log('pre');
 		}
-		
+
 		this.postDraw = function ( papplet ) {
 			//console.log('post');
 			if ( this.listeners ) {
@@ -178,6 +185,21 @@ var Interactive = (function(){
             } else {
                 ae = new ActiveElement( oneOrMoreListeners );
                 interactiveInstance.add( ae );
+            }
+        }
+        return ae;
+    }
+
+    Interactive.remove = function ( oneOrMoreListeners ) {
+        var ae = null;
+        if ( interactiveInstance ) {
+            if ( Object.prototype.toString.call( oneOrMoreListeners ) === '[object Array]' ) {
+                for ( var i = 0, k = oneOrMoreListeners.length; i < k; i++ ) {
+                    interactiveInstance.remove( oneOrMoreListeners[i] );
+                }
+                return null;
+            } else {
+                interactiveInstance.remove( oneOrMoreListeners );
             }
         }
         return ae;
@@ -231,8 +253,8 @@ var Interactive = (function(){
                 ia.eventBindings[event] = binding;
             }
             binding.push({
-                callback: function(){ 
-                    target[method].apply(target, arguments) 
+                callback: function(){
+                    target[method].apply(target, arguments)
                 },
                 source: source
             });
@@ -272,16 +294,16 @@ var Interactive = (function(){
     // -----------------------------------------
     //   class ActiveElement
     // -----------------------------------------
-	
+
     var ActiveElement = function () {
 
         this.listener = arguments[0];
         if ( !( 'isInside' in this.listener ) ) {
-			if ( ('x' in this.listener) && ('y' in this.listener) && 
+			if ( ('x' in this.listener) && ('y' in this.listener) &&
 			     ('width' in this.listener) && ('height' in this.listener) ) {
 				this.listener.isInside = function ( mx, my ) {
-					return Interactive.insideRect( this.x, this.y, 
-												   this.width, this.height, 
+					return Interactive.insideRect( this.x, this.y,
+												   this.width, this.height,
 												   mx, my );
 				}
 			} else {
@@ -306,9 +328,9 @@ var Interactive = (function(){
 
         this.mousePressed = function ( mx, my ) {
             if ( !(this.activated) ) return;
-			
+
 			this.pressed = this.listener.isInside( mx, my );
-				
+
             if ( this.pressed ) {
                 this.clickedPositionX = this.listener.x;
                 this.clickedPositionY = this.listener.y;
@@ -336,8 +358,8 @@ var Interactive = (function(){
                 this.draggedDistX = this.clickedMouseX - mx;
                 this.draggedDistY = this.clickedMouseY - my;
                 if ( 'mouseDragged' in this.listener )
-                    this.listener.mouseDragged( mx, my, 
-											    this.clickedPositionX - this.draggedDistX, 
+                    this.listener.mouseDragged( mx, my,
+											    this.clickedPositionX - this.draggedDistX,
 											    this.clickedPositionY - this.draggedDistY );
             } else {
                 var nowInside = this.listener.isInside( mx, my );
@@ -397,7 +419,7 @@ var Interactive = (function(){
 				}
 			}
 		}
-		
+
 		this.isActive = function () {
 			if ( this.listener ) {
 				if ( 'isActive' in this.listener ) {
@@ -406,7 +428,7 @@ var Interactive = (function(){
 			}
 			return this.activated;
 		}
-		
+
 		this.draw = function ( papplet ) {
 			if ( !(this.activated) ) return;
 			if ( this.listener ) {
