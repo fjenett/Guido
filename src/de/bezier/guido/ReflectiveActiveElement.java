@@ -14,23 +14,23 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	mouseDragged2, mouseDragged4,
 	mouseDoubleClicked0, mouseDoubleClicked2,
 	mouseScrolled1,
-	isInside2, 
+	isInside2,
 	isActive0, setActive1,
 	draw0;
 	Field fieldX, fieldY, fieldWidth, fieldHeight;
-	
+
 	ReflectiveActiveElement ( Object l )
 	{
 		super();
 		init( l );
 	}
-	
-	ReflectiveActiveElement ( Object l, float x, float y, float width, float height ) 
+
+	ReflectiveActiveElement ( Object l, float x, float y, float width, float height )
 	{
 		super( x, y, width, height );
 		init( l );
 	}
-	
+
 	/**
 	 *	TODO:
 	 *	- check and warn about unreachable functions, wrong parameters, ...
@@ -41,11 +41,11 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 			Class sClass = Class.forName( "DeBezierGuiGuiObject" );
 			setter = sClass.getMethod( "set", Object.class, Object.class );
 			if (debug) System.out.println( setter );
-			
+
 		} catch ( Exception e ) {
 			if (debug) e.printStackTrace();
 		}
-		
+
 		try {
 			Class sClass = Class.forName( "DeBezierGuiGuiObject" );
 			getter = sClass.getMethod( "get", Object.class, Field.class );
@@ -54,13 +54,13 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 		} catch ( Exception e ) {
 			if (debug) e.printStackTrace();
 		}
-		
+
 		listener = l;
-		
+
 		Method[] meths = getClass().getDeclaredMethods();
 		for ( Method m : meths ) {
 			try {
-				
+
 				// System.out.println( m.getName()+m.getParameterTypes().length );
 
 				Method mo = listener.getClass().getDeclaredMethod( m.getName(), m.getParameterTypes() );
@@ -82,14 +82,14 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 				if (debug) e.printStackTrace();
 			}
 		}
-		
+
 		Field[] fields = listener.getClass().getDeclaredFields();
-		for ( Field f : fields ) 
-		{	
+		for ( Field f : fields )
+		{
 			if ( f.getType() == float.class )
 			{
 				String fName = f.getName();
-				     
+
 				if ( fName.equals("x") )
 				{
 					fieldX = f;
@@ -113,7 +113,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 			}
 		}
 	}
-	
+
 	private void updateXY ()
 	{
 		// if ( fieldX != null && fieldY != null ) {
@@ -124,14 +124,14 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 		// 		if (debug) e.printStackTrace();
 		// 	}
 		// }
-		
+
 		// try {
 		// 	setter.invoke( null, this, listener );
 		// } catch ( Exception e ) {
 		// 	if (debug) e.printStackTrace();
 		// }
 	}
-	
+
 	/**
 	 *	Activate or deactivate callback.
 	 *
@@ -148,7 +148,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 		else
 			super.setActive( activeState );
 	}
-	
+
 	/**
 	 *	Getter callback for active state.
 	 *
@@ -164,10 +164,22 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 			} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 		else
 			return super.isActive();
-		
+
 		return false;
 	}
-	
+
+	/**
+	 *	Getter for listener object
+	 *
+	 *
+	 *  @return true or false reflecting active state of element
+	 */
+	public Object getListener ()
+	{
+		return listener;
+	}
+
+
 	/**
 	 *	Callback for mouse entered without arguments.
 	 *
@@ -176,7 +188,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseEntered () 
+	public void mouseEntered ()
 	{
 		updateXY();
 		try {
@@ -194,14 +206,14 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseEntered ( float mx, float my ) 
-	{ 
+	public void mouseEntered ( float mx, float my )
+	{
 		updateXY();
 		try {
 			if (mouseEntered2 != null) mouseEntered2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
-	
+
 	/**
 	 *	Callback for mouse moved over element without arguments.
 	 *
@@ -210,14 +222,14 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseMoved () 
-	{ 
+	public void mouseMoved ()
+	{
 		updateXY();
 		try {
 			if (mouseMoved0 != null) mouseMoved0.invoke( listener );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
-	
+
 	/**
 	 *	Callback for mouse entered with mouse position x and y.
 	 *
@@ -228,8 +240,8 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseMoved ( float mx, float my ) 
-	{ 
+	public void mouseMoved ( float mx, float my )
+	{
 		updateXY();
 		try {
 			if (mouseMoved2 != null) mouseMoved2.invoke( listener, mx, my );
@@ -244,8 +256,8 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseExited () 
-	{ 
+	public void mouseExited ()
+	{
 		updateXY();
 		try {
 			if (mouseExited0 != null) mouseExited0.invoke( listener );
@@ -262,14 +274,14 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseExited ( float mx, float my ) 
-	{ 
+	public void mouseExited ( float mx, float my )
+	{
 		updateXY();
 		try {
 			if (mouseExited2 != null) mouseExited2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
-	
+
 	/**
 	 *	Callback for mouse pressed without arguments.
 	 *
@@ -278,7 +290,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mousePressed () 
+	public void mousePressed ()
 	{
 		updateXY();
 		try {
@@ -296,7 +308,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mousePressed ( float mx, float my ) 
+	public void mousePressed ( float mx, float my )
 	{
 		updateXY();
 		try {
@@ -312,7 +324,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseDoubleClicked () 
+	public void mouseDoubleClicked ()
 	{
 		updateXY();
 		try {
@@ -330,7 +342,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseDoubleClicked ( float mx, float my ) 
+	public void mouseDoubleClicked ( float mx, float my )
 	{
 		updateXY();
 		try {
@@ -348,7 +360,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseDragged ( float mx, float my ) 
+	public void mouseDragged ( float mx, float my )
 	{
 		updateXY();
 		try {
@@ -357,7 +369,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	}
 
 	/**
-	 *	Callback for mouse dragged with mouse position x/y and 
+	 *	Callback for mouse dragged with mouse position x/y and
 	 *	drag distance xd and yd (difference between mouse position and click position).
 	 *
 	 * 	Implement this to be notified the mouse drags (moves pressed) on your element.
@@ -369,7 +381,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param dy horizontal drag distance: difference between mouse pressed y and current y
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseDragged ( float mx, float my, float dx, float dy ) 
+	public void mouseDragged ( float mx, float my, float dx, float dy )
 	{
 		updateXY();
 		try {
@@ -385,7 +397,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseReleased () 
+	public void mouseReleased ()
 	{
 		updateXY();
 		try {
@@ -403,14 +415,14 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseReleased ( float mx, float my ) 
+	public void mouseReleased ( float mx, float my )
 	{
 		updateXY();
 		try {
 			if (mouseReleased2 != null) mouseReleased2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
-	
+
 	/**
 	 *	Callback for mouse wheel / scroll with (normalized) scroll step.
 	 *
@@ -420,14 +432,14 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param step mouse wheel step value
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseScrolled ( float step ) 
+	public void mouseScrolled ( float step )
 	{
 		updateXY();
 		try {
 			if (mouseScrolled1 != null) mouseScrolled1.invoke( listener, step );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
-	
+
 	/**
 	 *	Callback for drawing your element.
 	 *
@@ -438,8 +450,8 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	public void draw ()
 	{
 		if ( draw0 != null )
-			try { 
-				draw0.invoke( listener ); 
+			try {
+				draw0.invoke( listener );
 			} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
@@ -449,14 +461,14 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *	A simple rectangle test is automatically done by reading x,y,width,height from your element if
 	 *	available.
 	 *
-	 *	By implementing this in your class you can alter the test to work with almost any shape and 
+	 *	By implementing this in your class you can alter the test to work with almost any shape and
 	 *  probably even in 3D space.
 	 *
 	 *  @param mx mouse pointer x coordinate
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.Interactive#insideRect(float x,float y,float width,float height,float mx,float my)
 	 */
-	public boolean isInside ( float mx, float my ) 
+	public boolean isInside ( float mx, float my )
 	{
 		updateXY();
 		try {
@@ -465,22 +477,22 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 		return isInsideFromFields( mx, my );
 	}
-	
-	private boolean isInsideFromFields ( float mx, float my ) 
+
+	private boolean isInsideFromFields ( float mx, float my )
 	{
 		if ( fieldX == null || fieldY == null || fieldWidth == null || fieldHeight == null )
 			return super.isInside( mx, my );
 		else if ( getter != null )
 		{
 			try {
-				
+
 				float x = 		(Float)(getter.invoke( null, this.listener, fieldX ));
 				float y = 		(Float)(getter.invoke( null, this.listener, fieldY ));
 				float width = 	(Float)(getter.invoke( null, this.listener, fieldWidth ));
 				float height = 	(Float)(getter.invoke( null, this.listener, fieldHeight ));
-				
+
 				return Interactive.insideRect( x, y, width, height, mx, my );
-				
+
 			} catch ( Exception e ) {
 				if (debug) e.printStackTrace();
 			}
