@@ -142,7 +142,7 @@ var Interactive = (function(){
 
         this.remove = function( listener ) {
             for ( var i = 0, k = this.listeners.length; i < k; i++ ) {
-                if ( this.listeners[i] == listener )
+                if ( this.listeners[i].listener == listener )
                     this.listeners.splice( i, 1 );
             }
         }
