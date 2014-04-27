@@ -18,7 +18,7 @@ public abstract class AbstractActiveElement extends Basic2DElement
 		Interactive.get().addElement( this );
 	}
 	
-	public AbstractActiveElement ( float x, float y, float width, float height ) 
+	public AbstractActiveElement ( float x, float y, float width, float height )
 	{
 		super(x,y,width,height);
 		Interactive.get().addElement( this );
@@ -29,7 +29,7 @@ public abstract class AbstractActiveElement extends Basic2DElement
 		debug = tf;
 	}
 
-	public void setActive ( boolean yesNo ) 
+	public void setActive ( boolean yesNo )
 	{
 		activated = yesNo;
 	}
@@ -62,15 +62,28 @@ public abstract class AbstractActiveElement extends Basic2DElement
 			long now = System.currentTimeMillis();
 			long lp = lastPressed;
 			lastPressed = now;
+			final Interactive manager = Interactive.get();
 			if ( now - lp < 200 )
 			{
-				mouseDoubleClicked( );
-				mouseDoubleClicked( mx, my );
+				if (manager.shouldCallbackWithoutPosition())
+				{
+					mouseDoubleClicked( );
+				}
+				if (manager.shouldCallbackWithPosition())
+				{
+					mouseDoubleClicked( mx, my );
+				}
 			}
 			else
 			{
-				mousePressed( );
-				mousePressed( mx, my );
+				if (manager.shouldCallbackWithoutPosition())
+				{
+					mousePressed( );
+				}
+				if (manager.shouldCallbackWithPosition())
+				{
+					mousePressed( mx, my );
+				}
 			}
 		}
 	}
@@ -85,12 +98,19 @@ public abstract class AbstractActiveElement extends Basic2DElement
 		if ( !isActive() ) return;
 
 		dragged = pressed;
-		if ( dragged ) 
+		if ( dragged )
 		{
 			draggedDistX = clickedMouseX - mx;
 			draggedDistY = clickedMouseY - my;
-			mouseDragged( mx, my );
-			mouseDragged( mx, my, clickedPositionX - draggedDistX, clickedPositionY - draggedDistY );
+			final Interactive manager = Interactive.get();
+			if (manager.shouldCallbackWithoutDelta())
+			{
+				mouseDragged( mx, my );
+			}
+			if (manager.shouldCallbackWithDelta())
+			{
+				mouseDragged( mx, my, clickedPositionX - draggedDistX, clickedPositionY - draggedDistY );
+			}
 		}
 	}
 	
@@ -101,15 +121,24 @@ public abstract class AbstractActiveElement extends Basic2DElement
 	{
 		if ( !isActive() ) return;
 
-		if ( dragged ) 
+		if ( dragged )
 		{
 			draggedDistX = clickedMouseX - mx;
 			draggedDistY = clickedMouseY - my;
 		}
 		
 		if ( pressed )
-			mouseReleased( );
-			mouseReleased( mx, my );
+		{
+			final Interactive manager = Interactive.get();
+			if (manager.shouldCallbackWithoutPosition())
+			{
+				mouseReleased( );
+			}
+			if (manager.shouldCallbackWithPosition())
+			{
+				mouseReleased( mx, my );
+			}
+		}
 	}
 	
 	abstract public void mouseReleased ( );

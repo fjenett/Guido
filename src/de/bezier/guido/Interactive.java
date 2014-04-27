@@ -23,6 +23,39 @@ implements MouseWheelListener
 {
 	private boolean enabled = true;
 
+	/*
+	 * These flags influence which AbstractActiveElement callbacks are called.
+	 * This permits Guido to be used with Jython, and perhaps, in the future,
+	 * other languages that don't support function name overloading by parameter
+	 * signature. 
+	 */
+	public static final int CALLBACKS_POSITION = 1;
+	public static final int CALLBACKS_NO_POSITION = 2;
+	public static final int CALLBACKS_DELTA = 4;
+	public static final int CALLBACKS_NO_DELTA = 8;
+	private int callbackStyle = CALLBACKS_POSITION | CALLBACKS_NO_POSITION | CALLBACKS_DELTA
+			| CALLBACKS_NO_DELTA;
+
+	boolean shouldCallbackWithPosition()
+	{
+		return (callbackStyle & CALLBACKS_POSITION) != 0;
+	}
+
+	boolean shouldCallbackWithoutPosition()
+	{
+		return (callbackStyle & CALLBACKS_NO_POSITION) != 0;
+	}
+
+	boolean shouldCallbackWithDelta()
+	{
+		return (callbackStyle & CALLBACKS_POSITION) != 0;
+	}
+
+	boolean shouldCallbackWithoutDelta()
+	{
+		return (callbackStyle & CALLBACKS_NO_POSITION) != 0;
+	}
+
 	ArrayList<AbstractActiveElement> interActiveElements;
 	private ArrayList<AbstractActiveElement> interActiveElementsList;
 
@@ -78,9 +111,7 @@ implements MouseWheelListener
 	 */
 	public static Interactive make ( PApplet papplet )
 	{
-		if ( manager == null )
-			manager = new Interactive( papplet );
-
+		manager = new Interactive( papplet );
 		return manager;
 	}
 
@@ -102,6 +133,22 @@ implements MouseWheelListener
 	//	static methods, states, utils
 	// ------------------------------------------
 
+	/**
+	 * Tell the Guido system which styles of event callbacks to use.
+	 * 
+	 * @param flags
+	 *					Any bitwise combination of {@link #CALLBACKS_POSITION},
+	 *					{@link #CALLBACKS_NO_POSITION}, {@link #CALLBACKS_DELTA}, and
+	 *					{@link #CALLBACKS_NO_DELTA}.
+	 */
+	public static void setCallbackStyle(final int flags)
+	{
+		if (get() != null)
+		{
+			get().callbackStyle = flags;
+		}
+	}
+	
 	/**
 	 *	Activate or deactivate and interface element.
 	 *
@@ -539,7 +586,7 @@ implements MouseWheelListener
 				mouseExited( evt );
 				break;
 			case processing.event.MouseEvent.WHEEL:
-				mouseWheelMovedImpl( evt.getAmount() );
+				mouseWheelMovedImpl( evt.getCount() );
 				break;
 		}
 
