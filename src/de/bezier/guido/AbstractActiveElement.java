@@ -62,7 +62,7 @@ public abstract class AbstractActiveElement extends Basic2DElement
 			long now = System.currentTimeMillis();
 			long lp = lastPressed;
 			lastPressed = now;
-			if ( now - lp < 200 )
+			if ( now - lp < 200 ) // click-speed should go into a config, or be read from system props
 			{
 				mouseDoubleClicked( );
 				mouseDoubleClickedAt( mx, my );
@@ -90,7 +90,9 @@ public abstract class AbstractActiveElement extends Basic2DElement
 			draggedDistX = clickedMouseX - mx;
 			draggedDistY = clickedMouseY - my;
 			mouseDraggedAt( mx, my );
-			mouseDraggedFromTo( mx, my, clickedPositionX - draggedDistX, clickedPositionY - draggedDistY );
+			mouseDraggedFromTo( mx, my, 
+								clickedPositionX - draggedDistX, 
+								clickedPositionY - draggedDistY );
 		}
 	}
 	

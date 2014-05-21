@@ -4,5 +4,5 @@ url = https://github.com/fjenett/Guido
 category = GUI
 sentence = A simple cross mode (P5/JS/Py/Rb) GUI library
 paragraph =  Guido is a small GUI library that is compatible with both Java (standard) and JavaScript, Python and Ruby modes
-version = 182
+version = 193
 prettyVersion = 0.1.0

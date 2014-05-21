@@ -6,13 +6,13 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 {
 	Object listener;
 	Method setter, getter;
-	Method mouseEntered0, mouseEntered2,
-	mouseMoved0, mouseMoved2,
-	mouseExited0, mouseExited2,
-	mousePressed0, mousePressed2,
-	mouseReleased2, mouseReleased0,
-	mouseDragged2, mouseDragged4,
-	mouseDoubleClicked0, mouseDoubleClicked2,
+	Method mouseEntered0, mouseEnteredAt2,
+	mouseMoved0, mouseMovedAt2,
+	mouseExited0, mouseExitedAt2,
+	mousePressed0, mousePressedAt2,
+	mouseReleased0, mouseReleasedAt2,
+	mouseDraggedAt2, mouseDraggedFromTo4,
+	mouseDoubleClicked0, mouseDoubleClickedAt2,
 	mouseScrolled1,
 	isInside2,
 	isActive0, setActive1,
@@ -210,7 +210,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	{
 		updateXY();
 		try {
-			if (mouseEntered2 != null) mouseEntered2.invoke( listener, mx, my );
+			if (mouseEnteredAt2 != null) mouseEnteredAt2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
@@ -244,7 +244,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	{
 		updateXY();
 		try {
-			if (mouseMoved2 != null) mouseMoved2.invoke( listener, mx, my );
+			if (mouseMovedAt2 != null) mouseMovedAt2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
@@ -278,7 +278,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	{
 		updateXY();
 		try {
-			if (mouseExited2 != null) mouseExited2.invoke( listener, mx, my );
+			if (mouseExitedAt2 != null) mouseExitedAt2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
@@ -312,7 +312,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	{
 		updateXY();
 		try {
-			if (mousePressed2 != null) mousePressed2.invoke( listener, mx, my );
+			if (mousePressedAt2 != null) mousePressedAt2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
@@ -346,7 +346,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	{
 		updateXY();
 		try {
-			if (mouseDoubleClicked2 != null) mouseDoubleClicked2.invoke( listener, mx, my );
+			if (mouseDoubleClickedAt2 != null) mouseDoubleClickedAt2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
@@ -364,7 +364,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	{
 		updateXY();
 		try {
-			if (mouseDragged2 != null) mouseDragged2.invoke( listener, mx, my );
+			if (mouseDraggedAt2 != null) mouseDraggedAt2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
@@ -385,7 +385,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	{
 		updateXY();
 		try {
-			if (mouseDragged4 != null) mouseDragged4.invoke( listener, mx, my, dx, dy );
+			if (mouseDraggedFromTo4 != null) mouseDraggedFromTo4.invoke( listener, mx, my, dx, dy );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
@@ -419,7 +419,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	{
 		updateXY();
 		try {
-			if (mouseReleased2 != null) mouseReleased2.invoke( listener, mx, my );
+			if (mouseReleasedAt2 != null) mouseReleasedAt2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 

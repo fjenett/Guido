@@ -20,7 +20,7 @@ void setup ()
         }
     }, "test" );
     
-    Interactive.send( this, "send-test" );
+    Interactive.send( this, "send-test" ); // send it!
 }
 
 void draw () {

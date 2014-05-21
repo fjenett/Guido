@@ -348,7 +348,7 @@ var Interactive = (function(){
                 this.clickedPositionY = this.listener.y;
                 this.clickedMouseX = mx;
                 this.clickedMouseY = my;
-                getCallFn( ['mousePressed','mousePressedAt'], this.listener )( mx, my );
+                getCallFn( this.listener, ['mousePressed','mousePressedAt'] )( mx, my );
             }
         }
 
@@ -356,7 +356,7 @@ var Interactive = (function(){
             if ( !(this.activated) ) return;
 
             if ( this.listener.isInside( mx, my ) ) {
-                getCallFn( ['mouseDoubleClicked','mouseDoubleClickedAt'], this.listener )( mx, my );
+                getCallFn( this.listener, ['mouseDoubleClicked','mouseDoubleClickedAt'] )( mx, my );
             }
         }
 
@@ -367,7 +367,7 @@ var Interactive = (function(){
             if ( this.dragged ) {
                 this.draggedDistX = this.clickedMouseX - mx;
                 this.draggedDistY = this.clickedMouseY - my;
-                getCallFn( ['mouseDraggedAt','mouseDraggedFromTo'], 
+                getCallFn( this.listener, ['mouseDraggedAt','mouseDraggedFromTo'], 
                             this.listener )( mx, my,
                     this.clickedPositionX - this.draggedDistX,
                     this.clickedPositionY - this.draggedDistY );
@@ -375,11 +375,11 @@ var Interactive = (function(){
                 var nowInside = this.listener.isInside( mx, my );
 
                 if ( !nowInside && this.hover ) {
-                    getCallFn( ['mouseExited','mouseExitedAt'], this.listener )( mx, my );
+                    getCallFn( this.listener, ['mouseExited','mouseExitedAt'] )( mx, my );
                 } else if ( nowInside && !this.hover ) {
-                    getCallFn( ['mouseEntered','mouseEnteredAt'], this.listener )( mx, my );
+                    getCallFn( this.listener, ['mouseEntered','mouseEnteredAt'] )( mx, my );
                 } else if ( nowInside ) {
-                    getCallFn( ['mouseMoved','mouseMovedAt'], this.listener )( mx, my );
+                    getCallFn( this.listener, ['mouseMoved','mouseMovedAt'] )( mx, my );
                 }
 
                 this.hover = nowInside;
@@ -395,7 +395,7 @@ var Interactive = (function(){
             }
 
             if ( this.pressed ) {
-                getCallFn( ['mouseReleased','mouseReleasedAt'], this.listener )( mx, my );    
+                getCallFn( this.listener, ['mouseReleased','mouseReleasedAt'] )( mx, my );    
             }
 
             this.pressed = this.dragged = false;

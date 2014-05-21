@@ -1,7 +1,5 @@
 /**
  *    Simple buttons
- *
- *    .. works with JavaScript mode since Processing 2.0a5
  */
 
 import de.bezier.guido.*;

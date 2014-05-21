@@ -1,8 +1,6 @@
 /**
  *    A list
  *
- *    .. works with JavaScript mode since Processing 2.0a5.
- *
  *    Make sure to try your scroll wheel!
  */
 
@@ -104,20 +102,20 @@ public class Listbox
         hasSlider = items.size() * itemHeight > height;
     }
     
-    void mouseMoved ( float mx, float my )
+    void mouseMovedAt ( float mx, float my )
     {
         if ( hasSlider && mx > width-20 ) return;
         
         hoverItem = listStartAt + int((my-y) / itemHeight);
     }
     
-    void mouseExited ( float mx, float my )
+    void mouseExitedAt ( float mx, float my )
     {
         hoverItem = -1;
     }
     
     // called from manager
-    void mouseDragged ( float mx, float my )
+    void mouseDraggedAt ( float mx, float my )
     {
         if ( !hasSlider ) return;
         if ( mx < x+width-20 ) return;

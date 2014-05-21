@@ -26,7 +26,7 @@ public class Slider
         on = false;
     }
     
-    void mouseDragged ( float mx, float my )
+    void mouseDraggedAt ( float mx, float my )
     {
         valueX = mx - height/2;
         
@@ -83,7 +83,7 @@ public class MultiSlider
         on = false;
     }
     
-    void mousePressed ( float mx, float my )
+    void mousePressedAt ( float mx, float my )
     {
         if ( left.isInside( mx, my ) )       activeHandle = left;
         else if ( right.isInside( mx, my ) ) activeHandle = right;
@@ -94,7 +94,7 @@ public class MultiSlider
         pressedXRight = right.x;
     }
     
-    void mouseDragged ( float mx, float my )
+    void mouseDraggedAt ( float mx, float my )
     {
         float vx = mx - left.width/2;
         vx = constrain( vx, x, x+width-left.width );

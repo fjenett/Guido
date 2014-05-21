@@ -1,7 +1,5 @@
 /**
  *    A slider
- *
- *    .. works with JavaScript mode since Processing 2.0a5
  */
 
 import de.bezier.guido.*;
@@ -50,7 +48,7 @@ public class Slider
     }
     
     // called from manager
-    void mouseDragged ( float mx, float my )
+    void mouseDraggedFromTo ( float mx, float my, float dx, float dy )
     {
         valueX = mx - height/2;
         
