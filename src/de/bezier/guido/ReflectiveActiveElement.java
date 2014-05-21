@@ -206,7 +206,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseEntered ( float mx, float my )
+	public void mouseEnteredAt ( float mx, float my )
 	{
 		updateXY();
 		try {
@@ -240,7 +240,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseMoved ( float mx, float my )
+	public void mouseMovedAt ( float mx, float my )
 	{
 		updateXY();
 		try {
@@ -274,7 +274,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseExited ( float mx, float my )
+	public void mouseExitedAt ( float mx, float my )
 	{
 		updateXY();
 		try {
@@ -308,7 +308,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mousePressed ( float mx, float my )
+	public void mousePressedAt ( float mx, float my )
 	{
 		updateXY();
 		try {
@@ -342,7 +342,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseDoubleClicked ( float mx, float my )
+	public void mouseDoubleClickedAt ( float mx, float my )
 	{
 		updateXY();
 		try {
@@ -360,7 +360,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseDragged ( float mx, float my )
+	public void mouseDraggedAt ( float mx, float my )
 	{
 		updateXY();
 		try {
@@ -381,7 +381,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param dy horizontal drag distance: difference between mouse pressed y and current y
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseDragged ( float mx, float my, float dx, float dy )
+	public void mouseDraggedFromTo ( float mx, float my, float dx, float dy )
 	{
 		updateXY();
 		try {
@@ -415,7 +415,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseReleased ( float mx, float my )
+	public void mouseReleasedAt ( float mx, float my )
 	{
 		updateXY();
 		try {

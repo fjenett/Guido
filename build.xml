@@ -9,9 +9,9 @@
 	</description>
 	
 	<property name="libraryName" 	value="Guido" />
-	<property name="versionNumber"  value="0.0.6" />
+	<property name="versionNumber"  value="0.1.0" />
 	<property name="author" 		value="Florian Jenett"/>
-	<property name="copyright" 		value="(c) 2012-2013"/>
+	<property name="copyright" 		value="(c) 2012-2014"/>
 	
 	<buildnumber file="resources/build.number" />
 	
@@ -24,7 +24,7 @@
 	
 	<!--property name="processing.classes" location="/Applications/Processing.app/Contents/Resources/Java/"/-->
 	<property name="processing.classes" 
-			  location="/Users/fjenett/Repos/processing/build/macosx/work/Processing.app/Contents/Resources/Java/"/>
+			  location="/Users/fjenett/Repos/processing/build/macosx/work/Processing.app/Contents/Java/"/>
 	<property name="processing.libs" 
 			  location="/Users/fjenett/Documents/Processing/libraries"/>	
 

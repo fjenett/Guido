@@ -40,13 +40,13 @@ public abstract class AbstractActiveElement extends Basic2DElement
 	}
 
 	public void mouseEntered ( ) { }
-	public void mouseEntered ( float mx, float my ) { }
+	public void mouseEnteredAt ( float mx, float my ) { }
 	
 	public void mouseMoved ( ) { }
-	public void mouseMoved ( float mx, float my ) { }
+	public void mouseMovedAt ( float mx, float my ) { }
 	
 	public void mouseExited ( ) { }
-	public void mouseExited ( float mx, float my ) { }
+	public void mouseExitedAt ( float mx, float my ) { }
 	
 	public void mousePressedPre ( float mx, float my )
 	{
@@ -65,20 +65,20 @@ public abstract class AbstractActiveElement extends Basic2DElement
 			if ( now - lp < 200 )
 			{
 				mouseDoubleClicked( );
-				mouseDoubleClicked( mx, my );
+				mouseDoubleClickedAt( mx, my );
 			}
 			else
 			{
 				mousePressed( );
-				mousePressed( mx, my );
+				mousePressedAt( mx, my );
 			}
 		}
 	}
 	
 	abstract public void mousePressed ( );
-	abstract public void mousePressed ( float mx, float my );
+	abstract public void mousePressedAt ( float mx, float my );
 	abstract public void mouseDoubleClicked ( );
-	abstract public void mouseDoubleClicked ( float mx, float my );
+	abstract public void mouseDoubleClickedAt ( float mx, float my );
 	
 	public void mouseDraggedPre ( float mx, float my )
 	{
@@ -89,13 +89,13 @@ public abstract class AbstractActiveElement extends Basic2DElement
 		{
 			draggedDistX = clickedMouseX - mx;
 			draggedDistY = clickedMouseY - my;
-			mouseDragged( mx, my );
-			mouseDragged( mx, my, clickedPositionX - draggedDistX, clickedPositionY - draggedDistY );
+			mouseDraggedAt( mx, my );
+			mouseDraggedFromTo( mx, my, clickedPositionX - draggedDistX, clickedPositionY - draggedDistY );
 		}
 	}
 	
-	abstract public void mouseDragged ( float mx, float my );
-	abstract public void mouseDragged ( float mx, float my, float dx, float dy );
+	abstract public void mouseDraggedAt ( float mx, float my );
+	abstract public void mouseDraggedFromTo ( float mx, float my, float dx, float dy );
 	
 	public void mouseReleasedPre ( float mx, float my )
 	{
@@ -109,11 +109,11 @@ public abstract class AbstractActiveElement extends Basic2DElement
 		
 		if ( pressed )
 			mouseReleased( );
-			mouseReleased( mx, my );
+			mouseReleasedAt( mx, my );
 	}
 	
 	abstract public void mouseReleased ( );
-	abstract public void mouseReleased ( float mx, float my );
+	abstract public void mouseReleasedAt ( float mx, float my );
 	
 	public void mouseReleasedPost ( float mx, float my )
 	{

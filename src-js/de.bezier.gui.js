@@ -75,6 +75,17 @@ var Interactive = (function(){
         }
     };
 
+    // helper to call one of many possible fns by name on a target
+    var getCallFn = function ( listener, methods ) {
+        for ( var m in methods ) {
+            if ( methods[m] in listener && 
+                typeof listener[methods[m]] === 'function' ) {
+                return listener[methods[m]];
+            }
+        }
+        return function(){}; // noop
+    }
+
     // -----------------------------------------
     //   class Interactive
     // -----------------------------------------
@@ -167,10 +178,11 @@ var Interactive = (function(){
     //   static
     // -----------------------------------------
 
-    Interactive.make = function ( t ) {
+    // Java version has optional 2nd arg "force" that is not needed in JS
+    Interactive.make = function ( targ ) {
         interactiveInstance = new Interactive({
-            target: t.externals.canvas,
-			papplet: t
+            target: targ.externals.canvas,
+			papplet: targ
         });
     }
 
@@ -326,7 +338,7 @@ var Interactive = (function(){
             this.debug = tf ? true : false;
         }
 
-        this.mousePressed = function ( mx, my ) {
+        this.mousePressed = this.mousePressedAt = function ( mx, my ) {
             if ( !(this.activated) ) return;
 
 			this.pressed = this.listener.isInside( mx, my );
@@ -336,53 +348,45 @@ var Interactive = (function(){
                 this.clickedPositionY = this.listener.y;
                 this.clickedMouseX = mx;
                 this.clickedMouseY = my;
-                if ( 'mousePressed' in this.listener )
-                    this.listener.mousePressed ( mx, my );
+                getCallFn( ['mousePressed','mousePressedAt'], this.listener )( mx, my );
             }
         }
 
-        this.mouseDoubleClicked = function ( mx, my ) {
+        this.mouseDoubleClicked = this.mouseDoubleClickedAt = function ( mx, my ) {
             if ( !(this.activated) ) return;
 
             if ( this.listener.isInside( mx, my ) ) {
-                if ( 'mouseDoubleClicked' in this.listener )
-                    this.listener.mouseDoubleClicked( mx, my );
+                getCallFn( ['mouseDoubleClicked','mouseDoubleClickedAt'], this.listener )( mx, my );
             }
         }
 
-        this.mouseMoved = function ( mx, my ) {
+        this.mouseMoved = this.mouseMovedAt = function ( mx, my ) {
             if ( !(this.activated) ) return;
 
             this.dragged = this.pressed;
             if ( this.dragged ) {
                 this.draggedDistX = this.clickedMouseX - mx;
                 this.draggedDistY = this.clickedMouseY - my;
-                if ( 'mouseDragged' in this.listener )
-                    this.listener.mouseDragged( mx, my,
-											    this.clickedPositionX - this.draggedDistX,
-											    this.clickedPositionY - this.draggedDistY );
+                getCallFn( ['mouseDraggedAt','mouseDraggedFromTo'], 
+                            this.listener )( mx, my,
+                    this.clickedPositionX - this.draggedDistX,
+                    this.clickedPositionY - this.draggedDistY );
             } else {
                 var nowInside = this.listener.isInside( mx, my );
 
                 if ( !nowInside && this.hover ) {
-                    if ( 'mouseExited' in this.listener ) {
-                        this.listener.mouseExited( mx, my );
-                    }
+                    getCallFn( ['mouseExited','mouseExitedAt'], this.listener )( mx, my );
                 } else if ( nowInside && !this.hover ) {
-                    if ( 'mouseEntered' in this.listener ) {
-                        this.listener.mouseEntered( mx, my );
-                    }
+                    getCallFn( ['mouseEntered','mouseEnteredAt'], this.listener )( mx, my );
                 } else if ( nowInside ) {
-                    if ( 'mouseMoved' in this.listener ) {
-                        this.listener.mouseMoved( mx, my );
-                    }
+                    getCallFn( ['mouseMoved','mouseMovedAt'], this.listener )( mx, my );
                 }
 
                 this.hover = nowInside;
             }
         }
 
-        this.mouseReleased = function ( mx, my ) {
+        this.mouseReleased = this.mouseReleasedAt = function ( mx, my ) {
             if ( !(this.activated) ) return;
 
             if ( this.dragged ) {
@@ -391,8 +395,7 @@ var Interactive = (function(){
             }
 
             if ( this.pressed ) {
-                if ( 'mouseReleased' in this.listener )
-                    this.listener.mouseReleased( mx, my );
+                getCallFn( ['mouseReleased','mouseReleasedAt'], this.listener )( mx, my );    
             }
 
             this.pressed = this.dragged = false;

@@ -85,6 +85,21 @@ implements MouseWheelListener
 	}
 
 	/**
+	 *	Alternative entry point allows to force to renew the Interactive instance. This solves a problem with Python mode
+	 *
+	 *	@param papplet Your sketch
+	 *	@param force Force a new instance
+	 *	@see #make(PApplet)
+	 */
+	public static Interactive make ( PApplet papplet, boolean force )
+	{
+		if ( manager == null || force )
+			manager = new Interactive( papplet );
+
+		return manager;
+	}
+
+	/**
 	 *	Get the actual manager instance.
 	 *
 	 *	@return the Interactive instance which is the actual manager, or null
@@ -438,12 +453,12 @@ implements MouseWheelListener
 			if ( interActiveElement.hover && !wasHover )
 			{
 				interActiveElement.mouseEntered( );
-				interActiveElement.mouseEntered( mx, my );
+				interActiveElement.mouseEnteredAt( mx, my );
 			}
 			else if ( !interActiveElement.hover && wasHover )
 			{
 				interActiveElement.mouseExited( );
-				interActiveElement.mouseExited( mx, my );
+				interActiveElement.mouseExitedAt( mx, my );
 			}
 		}
 
@@ -563,17 +578,17 @@ implements MouseWheelListener
 			if ( interActiveElement.hover && !wasHover )
 			{
 				interActiveElement.mouseEntered( );
-				interActiveElement.mouseEntered( mx, my );
+				interActiveElement.mouseEnteredAt( mx, my );
 			}
 			else if ( !interActiveElement.hover && wasHover )
 			{
 				interActiveElement.mouseExited( );
-				interActiveElement.mouseExited( mx, my );
+				interActiveElement.mouseExitedAt( mx, my );
 			}
 			else
 			{
 				interActiveElement.mouseMoved( );
-				interActiveElement.mouseMoved( mx, my );
+				interActiveElement.mouseMovedAt( mx, my );
 			}
 		}
 	}
