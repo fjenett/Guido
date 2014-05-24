@@ -78,7 +78,7 @@ var Interactive = (function(){
     // helper to call one of many possible fns by name on a target
     var getCallFn = function ( listener, methods ) {
         for ( var m in methods ) {
-            if ( methods[m] in listener && 
+            if ( methods[m] in listener &&
                 typeof listener[methods[m]] === 'function' ) {
                 return listener[methods[m]];
             }
@@ -181,8 +181,8 @@ var Interactive = (function(){
     // Java version has optional 2nd arg "force" that is not needed in JS
     Interactive.make = function ( targ ) {
         interactiveInstance = new Interactive({
-            target: targ.externals.canvas,
-			papplet: targ
+          target: targ.externals.canvas,
+          papplet: targ
         });
     }
 
@@ -367,7 +367,7 @@ var Interactive = (function(){
             if ( this.dragged ) {
                 this.draggedDistX = this.clickedMouseX - mx;
                 this.draggedDistY = this.clickedMouseY - my;
-                getCallFn( this.listener, ['mouseDraggedAt','mouseDraggedFromTo'], 
+                getCallFn( this.listener, ['mouseDraggedAt','mouseDraggedFromTo'],
                             this.listener )( mx, my,
                     this.clickedPositionX - this.draggedDistX,
                     this.clickedPositionY - this.draggedDistY );
@@ -395,7 +395,7 @@ var Interactive = (function(){
             }
 
             if ( this.pressed ) {
-                getCallFn( this.listener, ['mouseReleased','mouseReleasedAt'] )( mx, my );    
+                getCallFn( this.listener, ['mouseReleased','mouseReleasedAt'] )( mx, my );
             }
 
             this.pressed = this.dragged = false;
