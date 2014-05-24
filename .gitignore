@@ -8,3 +8,4 @@ releases
 Guido/*
 sketch.properties
 build.number
+.ruby-version
