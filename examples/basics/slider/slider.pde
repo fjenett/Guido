@@ -32,7 +32,8 @@ void draw ()
 public class Slider
 {
     float x, y, width, height;
-    float valueX = 0, value;
+    float valueX = 0;
+    float value; // change this one to type double if you need the extra precision
     
     Slider ( float xx, float yy, float ww, float hh ) 
     {
