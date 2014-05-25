@@ -12,7 +12,7 @@ class SimpleButton(ActiveElement):
         super(SimpleButton, self).__init__(x, y, w, h)
         self.on = False
 
-    def mousePressed(self):
+    def mousePressed(self,mx,my):
         self.on = not self.on
 
     def draw(self):

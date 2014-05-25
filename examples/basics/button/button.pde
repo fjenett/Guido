@@ -45,7 +45,7 @@ public class SimpleButton
     
     // called by manager
     
-    void mousePressed () 
+    void mousePressed ( float mx, float my ) 
     {
         on = !on;
     }

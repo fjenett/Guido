@@ -452,13 +452,11 @@ implements MouseWheelListener
 			interActiveElement.hover = interActiveElement.isInside( mx, my );
 			if ( interActiveElement.hover && !wasHover )
 			{
-				interActiveElement.mouseEntered( );
-				interActiveElement.mouseEnteredAt( mx, my );
+				interActiveElement.mouseEntered( mx, my );
 			}
 			else if ( !interActiveElement.hover && wasHover )
 			{
-				interActiveElement.mouseExited( );
-				interActiveElement.mouseExitedAt( mx, my );
+				interActiveElement.mouseExited( mx, my );
 			}
 		}
 
@@ -577,18 +575,15 @@ implements MouseWheelListener
 			interActiveElement.hover = interActiveElement.isInside( mx, my );
 			if ( interActiveElement.hover && !wasHover )
 			{
-				interActiveElement.mouseEntered( );
-				interActiveElement.mouseEnteredAt( mx, my );
+				interActiveElement.mouseEntered( mx, my );
 			}
 			else if ( !interActiveElement.hover && wasHover )
 			{
-				interActiveElement.mouseExited( );
-				interActiveElement.mouseExitedAt( mx, my );
+				interActiveElement.mouseExited( mx, my );
 			}
 			else
 			{
-				interActiveElement.mouseMoved( );
-				interActiveElement.mouseMovedAt( mx, my );
+				interActiveElement.mouseMoved( mx, my );
 			}
 		}
 	}

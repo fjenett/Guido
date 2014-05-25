@@ -16,17 +16,17 @@ public class Slider
         Interactive.add( this );
     }
     
-    void mouseEntered ()
+    void mouseEntered ( float mx, float my )
     {
         on = true;
     }
     
-    void mouseExited ()
+    void mouseExited ( float mx, float my )
     {
         on = false;
     }
     
-    void mouseDraggedAt ( float mx, float my )
+    void mouseDragged ( float mx, float my, float dx, float dy )
     {
         valueX = mx - height/2;
         
@@ -73,17 +73,17 @@ public class MultiSlider
         Interactive.add( this );
     }
     
-    void mouseEntered ()
+    void mouseEntered ( float mx, float my )
     {
         on = true;
     }
     
-    void mouseExited ()
+    void mouseExited ( float mx, float my )
     {
         on = false;
     }
     
-    void mousePressedAt ( float mx, float my )
+    void mousePressed ( float mx, float my )
     {
         if ( left.isInside( mx, my ) )       activeHandle = left;
         else if ( right.isInside( mx, my ) ) activeHandle = right;
@@ -94,7 +94,7 @@ public class MultiSlider
         pressedXRight = right.x;
     }
     
-    void mouseDraggedAt ( float mx, float my )
+    void mouseDragged ( float mx, float my, float dx, float dy )
     {
         float vx = mx - left.width/2;
         vx = constrain( vx, x, x+width-left.width );
@@ -115,15 +115,15 @@ public class MultiSlider
         }
         else // dragging in between handles
         {
-            float dx = mx-pressedX;
+            float dx2 = mx-pressedX;
             
-            if ( pressedXLeft + dx >= x && pressedXRight + dx <= x+(width-right.width) )
+            if ( pressedXLeft + dx2 >= x && pressedXRight + dx2 <= x+(width-right.width) )
             {
-                values[0] = map( pressedXLeft + dx,  x, x+width-left.width, 0, 1 );
-                left.x = pressedXLeft + dx;
+                values[0] = map( pressedXLeft + dx2,  x, x+width-left.width, 0, 1 );
+                left.x = pressedXLeft + dx2;
                 
-                values[1] = map( pressedXRight + dx, x, x+width-left.width, 0, 1 );
-                right.x = pressedXRight + dx;
+                values[1] = map( pressedXRight + dx2, x, x+width-left.width, 0, 1 );
+                right.x = pressedXRight + dx2;
                 
                 Interactive.send( this, "leftValueChanged",  values[0] );
                 Interactive.send( this, "rightValueChanged", values[1] );

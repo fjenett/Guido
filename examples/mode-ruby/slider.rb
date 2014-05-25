@@ -33,15 +33,15 @@ class Slider < ActiveElement
     @value_x = x
   end
 
-  def mouseEntered
+  def mouseEntered (mx, my)
   	@hover = true
   end
 
-  def mouseExited
+  def mouseExited (mx, my)
   	@hover = false
   end
 
-  def mouseDraggedAt (mx, my)
+  def mouseDragged (mx, my, dx, dy)
 
   	@value_x = mx - @height/2
     

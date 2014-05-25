@@ -15,7 +15,7 @@ class SimpleSlider(ActiveElement):
         self.valueX = x
         self.value = 0
     
-    def mouseDraggedFromTo(self, mx, my, dx, dy ):
+    def mouseDragged(self, mx, my, dx, dy ):
         self.valueX = mx - self.height/2
         
         if ( self.valueX < self.x ):

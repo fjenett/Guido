@@ -49,7 +49,7 @@ public class Slider
     }
     
     // called from manager
-    void mouseDraggedFromTo ( float mx, float my, float dx, float dy )
+    void mouseDragged ( float mx, float my, float dx, float dy )
     {
         valueX = mx - height/2;
         

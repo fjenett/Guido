@@ -6,13 +6,13 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 {
 	Object listener;
 	Method setter, getter;
-	Method mouseEntered0, mouseEnteredAt2,
-	mouseMoved0, mouseMovedAt2,
+	Method mouseEntered0, mouseEntered2,
+	mouseMoved0, mouseMoved2,
 	mouseExited0, mouseExitedAt2,
-	mousePressed0, mousePressedAt2,
-	mouseReleased0, mouseReleasedAt2,
-	mouseDraggedAt2, mouseDraggedFromTo4,
-	mouseDoubleClicked0, mouseDoubleClickedAt2,
+	mousePressed0, mousePressed2,
+	mouseReleased0, mouseReleased2,
+	mouseDragged2, mouseDragged4,
+	mouseDoubleClicked0, mouseDoubleClicked2,
 	mouseScrolled1,
 	isInside2,
 	isActive0, setActive1,
@@ -181,20 +181,12 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 
 
 	/**
-	 *	Callback for mouse entered without arguments.
-	 *
-	 * 	Implement this to be notified once the mouse pointer (cursor) enters your element.
-	 *	See isInside() for how entering is determined.
+	 *	Deprecated since 0.1.0, use mouseEntered ( float mx, float my )
 	 *
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
+	 *	@deprecated Since 0.1.0, use {@link #mouseEntered(float,float)}
 	 */
-	public void mouseEntered ()
-	{
-		updateXY();
-		try {
-			if (mouseEntered0 != null) mouseEntered0.invoke( listener );
-		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
-	}
+	public void mouseEntered () { }
 
 	/**
 	 *	Callback for mouse entered with mouse position x and y.
@@ -206,29 +198,21 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseEnteredAt ( float mx, float my )
+	public void mouseEntered ( float mx, float my )
 	{
 		updateXY();
 		try {
-			if (mouseEnteredAt2 != null) mouseEnteredAt2.invoke( listener, mx, my );
+			if (mouseEntered2 != null) mouseEntered2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
 	/**
-	 *	Callback for mouse moved over element without arguments.
-	 *
-	 * 	Implement this to be notified when the mouse pointer (cursor) moves over your element.
-	 *	See isInside() for how "over" is determined.
+	 *	Deprecated since 0.1.0, use mouseMoved( float mx, float my ) instead
 	 *
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
+	 *	@deprecated Since 0.1.0, use {@link #mouseMoved(float,float)}
 	 */
-	public void mouseMoved ()
-	{
-		updateXY();
-		try {
-			if (mouseMoved0 != null) mouseMoved0.invoke( listener );
-		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
-	}
+	public void mouseMoved () { }
 
 	/**
 	 *	Callback for mouse entered with mouse position x and y.
@@ -240,29 +224,21 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseMovedAt ( float mx, float my )
+	public void mouseMoved ( float mx, float my )
 	{
 		updateXY();
 		try {
-			if (mouseMovedAt2 != null) mouseMovedAt2.invoke( listener, mx, my );
+			if (mouseMoved2 != null) mouseMoved2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
 	/**
-	 *	Callback for mouse leave/exited without arguments.
-	 *
-	 * 	Implement this to be notified once the mouse pointer (cursor) leaves your element.
-	 *	See isInside() for how leaving is determined.
+	 *	Deprecated since 0.1.0, use mouseExited( float mx, float my ) instead
 	 *
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
+	 *	@deprecated Since 0.1.0, use {@link #mouseExited(float,float)} instead
 	 */
-	public void mouseExited ()
-	{
-		updateXY();
-		try {
-			if (mouseExited0 != null) mouseExited0.invoke( listener );
-		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
-	}
+	public void mouseExited () { }
 
 	/**
 	 *	Callback for mouse leave/exited witho mouse position x and y.
@@ -274,7 +250,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseExitedAt ( float mx, float my )
+	public void mouseExited ( float mx, float my )
 	{
 		updateXY();
 		try {
@@ -283,20 +259,11 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	}
 
 	/**
-	 *	Callback for mouse pressed without arguments.
+	 *	Deprecated since 0.1.0, use mousePressed( float mx, float my ) instead
 	 *
-	 * 	Implement this to be notified once the mouse is pressed on your element.
-	 *	See isInside() for how on is determined.
-	 *
-	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
+	 *	@deprecated Since 0.1.0, use {@link #mousePressed(float,float)} instead
 	 */
-	public void mousePressed ()
-	{
-		updateXY();
-		try {
-			if (mousePressed0 != null) mousePressed0.invoke( listener );
-		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
-	}
+	public void mousePressed () { }
 
 	/**
 	 *	Callback for mouse pressed with mouse position x and y.
@@ -308,29 +275,20 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mousePressedAt ( float mx, float my )
+	public void mousePressed ( float mx, float my )
 	{
 		updateXY();
 		try {
-			if (mousePressedAt2 != null) mousePressedAt2.invoke( listener, mx, my );
+			if (mousePressed2 != null) mousePressed2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
 	/**
-	 *	Callback for mouse double pressed without arguments.
+	 *	Deprecated since 0.1.0, use mouseDoubleClicked( float mx, float my ) instead
 	 *
-	 * 	Implement this to be notified once your element has been double clicked (pressed twice in a short time frame).
-	 *	See isInside() for how on is determined.
-	 *
-	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
+	 *	@deprecated Since 0.1.0, use {@link #mouseDoubleClicked(float,float)} instead
 	 */
-	public void mouseDoubleClicked ()
-	{
-		updateXY();
-		try {
-			if (mouseDoubleClicked0 != null) mouseDoubleClicked0.invoke( listener );
-		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
-	}
+	public void mouseDoubleClicked () { }
 
 	/**
 	 *	Callback for mouse double pressed with mouse position x and y.
@@ -342,31 +300,20 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseDoubleClickedAt ( float mx, float my )
+	public void mouseDoubleClicked ( float mx, float my )
 	{
 		updateXY();
 		try {
-			if (mouseDoubleClickedAt2 != null) mouseDoubleClickedAt2.invoke( listener, mx, my );
+			if (mouseDoubleClicked2 != null) mouseDoubleClicked2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
 	/**
-	 *	Callback for mouse dragged with mouse position x and y.
+	 *	Deprecated since 0.1.0, use mouseDragged( float mx, float my, float dx, float dy ) instead
 	 *
-	 * 	Implement this to be notified the mouse drags (moves pressed) on your element.
-	 *	See isInside() for how on is determined.
-	 *
-	 *  @param mx mouse pointer x coordinate
-	 *  @param my mouse pointer y coordinate
-	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
+	 *	@deprecated Since 0.1.0, use {@link #mouseDragged(float,float,float,float)} instead
 	 */
-	public void mouseDraggedAt ( float mx, float my )
-	{
-		updateXY();
-		try {
-			if (mouseDraggedAt2 != null) mouseDraggedAt2.invoke( listener, mx, my );
-		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
-	}
+	public void mouseDragged ( float mx, float my ) { }
 
 	/**
 	 *	Callback for mouse dragged with mouse position x/y and
@@ -381,29 +328,20 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param dy horizontal drag distance: difference between mouse pressed y and current y
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseDraggedFromTo ( float mx, float my, float dx, float dy )
+	public void mouseDragged ( float mx, float my, float dx, float dy )
 	{
 		updateXY();
 		try {
-			if (mouseDraggedFromTo4 != null) mouseDraggedFromTo4.invoke( listener, mx, my, dx, dy );
+			if (mouseDragged4 != null) mouseDragged4.invoke( listener, mx, my, dx, dy );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 
 	/**
-	 *	Callback for mouse released without arguments.
+	 *	Deprecated since 0.1.0, use mouseReleased( float mx, float my ) instead
 	 *
-	 * 	Implement this to be notified the mouse was released from pressing your element.
-	 *	See isInside() for how on is determined.
-	 *
-	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
+	 *	@deprecated Since 0.1.0, use {@link #mouseReleased(float,float)} instead
 	 */
-	public void mouseReleased ()
-	{
-		updateXY();
-		try {
-			if (mouseReleased0 != null) mouseReleased0.invoke( listener );
-		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
-	}
+	public void mouseReleased () { }
 
 	/**
 	 *	Callback for mouse released with mouse position x and y.
@@ -415,11 +353,11 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	 *  @param my mouse pointer y coordinate
 	 *	@see de.bezier.guido.ReflectiveActiveElement#isInside(float mx,float my)
 	 */
-	public void mouseReleasedAt ( float mx, float my )
+	public void mouseReleased ( float mx, float my )
 	{
 		updateXY();
 		try {
-			if (mouseReleasedAt2 != null) mouseReleasedAt2.invoke( listener, mx, my );
+			if (mouseReleased2 != null) mouseReleased2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 

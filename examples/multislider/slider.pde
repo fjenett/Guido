@@ -28,13 +28,13 @@ public class MultiSlider
         on = false;
     }
     
-    void mousePressedAt ( float mx, float my )
+    void mousePressed ( float mx, float my )
     {
         if ( left.isInside( mx, my ) ) activeHandle = left;
         else if ( right.isInside( mx, my ) ) activeHandle = right;
     }
     
-    void mouseDraggedAt ( float mx, float my )
+    void mouseDragged ( float mx, float my, float dx, float dy )
     {
         if ( activeHandle == null ) return;
         

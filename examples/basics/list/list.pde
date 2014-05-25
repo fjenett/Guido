@@ -73,20 +73,20 @@ public class Listbox
         hasSlider = items.size() * itemHeight > height;
     }
     
-    public void mouseMovedAt ( float mx, float my )
+    public void mouseMoved ( float mx, float my )
     {
         if ( hasSlider && mx > width-20 ) return;
         
         hoverItem = listStartAt + int((my-y) / itemHeight);
     }
     
-    public void mouseExitedAt ( float mx, float my )
+    public void mouseExited ( float mx, float my )
     {
         hoverItem = -1;
     }
     
     // called from manager
-    void mouseDraggedAt ( float mx, float my )
+    void mouseDragged ( float mx, float my, float dx, float dy )
     {
         if ( !hasSlider ) return;
         if ( mx < x+width-20 ) return;
@@ -115,7 +115,7 @@ public class Listbox
         listStartAt = int( listOffset / itemHeight );
     }
     
-    public void mousePressedAt ( float mx, float my )
+    public void mousePressed ( float mx, float my )
     {
         if ( hasSlider && mx > width-20 ) return;
         

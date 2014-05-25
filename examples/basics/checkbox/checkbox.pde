@@ -34,7 +34,7 @@ public class CheckBox
         Interactive.add( this );
     }
     
-    void mouseReleased ()
+    void mouseReleased ( float mx, float my )
     {
         checked = !checked;
     }
