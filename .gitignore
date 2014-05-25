@@ -9,3 +9,5 @@ Guido/*
 sketch.properties
 build.number
 .ruby-version
+bin-test
+test-reports
