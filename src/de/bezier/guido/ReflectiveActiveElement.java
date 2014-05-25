@@ -6,13 +6,13 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 {
 	Object listener;
 	Method setter, getter;
-	Method mouseEntered0, mouseEntered2,
-	mouseMoved0, mouseMoved2,
-	mouseExited0, mouseExitedAt2,
-	mousePressed0, mousePressed2,
-	mouseReleased0, mouseReleased2,
-	mouseDragged2, mouseDragged4,
-	mouseDoubleClicked0, mouseDoubleClicked2,
+	Method mouseEntered2,
+	mouseMoved2,
+	mouseExited2,
+	mousePressed2,
+	mouseReleased2,
+	mouseDragged4,
+	mouseDoubleClicked2,
 	mouseScrolled1,
 	isInside2,
 	isActive0, setActive1,
@@ -38,7 +38,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	private void init ( Object l )
 	{
 		try {
-			Class sClass = Class.forName( "DeBezierGuiGuiObject" );
+			Class sClass = Class.forName( "DeBezierGuidoReflectionHelper" );
 			setter = sClass.getMethod( "set", Object.class, Object.class );
 			if (debug) System.out.println( setter );
 
@@ -47,7 +47,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 		}
 
 		try {
-			Class sClass = Class.forName( "DeBezierGuiGuiObject" );
+			Class sClass = Class.forName( "DeBezierGuidoReflectionHelper" );
 			getter = sClass.getMethod( "get", Object.class, Field.class );
 			if (debug) System.out.println( getter );
 
@@ -58,15 +58,37 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 		listener = l;
 
 		Method[] meths = getClass().getDeclaredMethods();
-		for ( Method m : meths ) {
+		for ( Method m : meths ) 
+		{
 			try {
-
-				// System.out.println( m.getName()+m.getParameterTypes().length );
 
 				Method mo = listener.getClass().getDeclaredMethod( m.getName(), m.getParameterTypes() );
 				if ( mo != null )
 				{
-					getClass().getDeclaredField( m.getName()+m.getParameterTypes().length ).set( this, mo );
+					if ( m.getName().startsWith("mouse") ) {
+						int paramsLength = m.getParameterTypes().length;
+						if ( m.getName().equals("mouseDragged") && paramsLength == 2 ) {
+							System.err.println(String.format(
+								"Callback method \"%s\" with 2 arguments is no longer supported!\n"+
+								"mouseDragged(float mx, float my) became mouseDragged(float mx, float my, float dx, float dy)",
+								m.getName(),
+								paramsLength
+							));
+							continue;
+						} else if ( paramsLength == 0 ) {
+							System.err.println(String.format(
+								"Callback method \"%s\" without arguments is no longer supported!\n"+
+								"%s() became %s(float mx, float my)",
+								m.getName(),
+								paramsLength
+							));
+							continue;
+						}
+					}
+
+					Field mField = getClass().getDeclaredField( m.getName()+m.getParameterTypes().length );
+					mField.set( this, mo );
+					
 					if (debug) System.out.println( mo.getName() );
 				}
 				// else
@@ -254,7 +276,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement
 	{
 		updateXY();
 		try {
-			if (mouseExitedAt2 != null) mouseExitedAt2.invoke( listener, mx, my );
+			if (mouseExited2 != null) mouseExited2.invoke( listener, mx, my );
 		} catch ( Exception e ) { if (debug) e.printStackTrace(); }
 	}
 

@@ -8,7 +8,7 @@ import java.lang.reflect.*;
  *	objects that are not inside a package. Normally this is not permitted
  *	by the Java security manager.
  */
-public class DeBezierGuiGuiObject
+public class DeBezierGuidoReflectionHelper
 {
 	/**
 	 *	Set an objects fields from matching fields in another object.
